@@ -262,22 +262,6 @@ Requires 50+ labeled samples. Use `dataset_stats` to check progress.
 
 ---
 
-## Team
-
-| Name                  | Role               |
-|----------------------|---------------------|
-| Agam Gupta           | Product Owner       |
-| Piyusha Taware       | Scrum Master        |
-| Shaunak Mahajan      | Development Lead    |
-| Karna Mehta          | Backend Developer   |
-| Paarth Soni          | Backend Developer   |
-| Chaitanya Gandhi     | Backend Developer   |
-| Mihika Dakappagari   | Frontend Developer  |
-| Aryan Shah           | Frontend Developer  |
-| Khushi Mehta         | UI/UX Designer      |
-| Harsh Mangukiya      | Tester              |
-
----
 
 ## Development Methodology
 
