@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>MarketNoise — Demo Companion</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reset.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/theme/black.css" />
+<style>
+  :root {
+    --g:  #22c55e;
+    --g2: #4ade80;
+    --g3: rgba(34,197,94,0.12);
+    --g4: rgba(34,197,94,0.25);
+    --s:  #111111;
+    --s2: #1a1a1a;
+    --s3: #242424;
+    --r:  #ef4444;
+    --y:  #eab308;
+    --p:  #a855f7;
+    --b:  #3b82f6;
+    --t:  #e5e5e5;
+    --m:  #888888;
+  }
+
+  /* ── Base ── */
+  .reveal { font-family: 'Inter','Segoe UI',system-ui,sans-serif; background:#0c0c0c; color:var(--t); }
+  .reveal .slides section { padding: 0 1.6rem; text-align:left; }
+  .reveal h1,.reveal h2,.reveal h3,.reveal h4 { text-transform:none; letter-spacing:-0.02em; font-weight:800; color:#fff; }
+  .reveal h2 { font-size:1.55rem; margin-bottom:0.6rem; line-height:1.2; }
+  .reveal h3 { font-size:1rem; color:var(--g); margin:0 0 0.25rem; }
+  .reveal p  { font-size:0.8rem; line-height:1.65; color:#ccc; margin:0 0 0.4rem; }
+  .reveal ul { list-style:none; padding:0; margin:0; }
+  .reveal li { font-size:0.78rem; line-height:1.6; color:#ccc; padding-left:1.1rem; position:relative; }
+  .reveal li::before { content:"›"; color:var(--g); position:absolute; left:0; font-weight:700; }
+  .reveal .progress { color:var(--g); }
+  .reveal .controls { color:var(--g); }
+  .reveal .slide-number { color:#444; font-size:0.65rem; }
+
+  /* ── Colour helpers ── */
+  .g  { color:var(--g);  font-weight:700; }
+  .g2 { color:var(--g2); }
+  .r  { color:var(--r);  font-weight:700; }
+  .y  { color:var(--y);  font-weight:700; }
+  .p  { color:#c084fc;   font-weight:700; }
+  .b  { color:#60a5fa;   font-weight:700; }
+  .m  { color:var(--m); }
+  .w  { color:#fff; font-weight:700; }
+
+  /* ── Cards ── */
+  .card {
+    background:var(--s2); border:1px solid rgba(255,255,255,0.07);
+    border-radius:12px; padding:0.75rem 1rem;
+  }
+  .card-g {
+    background:var(--g3); border:1px solid var(--g4);
+    border-radius:12px; padding:0.75rem 1rem;
+  }
+  .card-r { background:rgba(239,68,68,0.06); border:1px solid rgba(239,68,68,0.2); border-radius:12px; padding:0.75rem 1rem; }
+  .card-y { background:rgba(234,179,8,0.06);  border:1px solid rgba(234,179,8,0.2);  border-radius:12px; padding:0.75rem 1rem; }
+  .card-p { background:rgba(168,85,247,0.06); border:1px solid rgba(168,85,247,0.2); border-radius:12px; padding:0.75rem 1rem; }
+  .card-b { background:rgba(59,130,246,0.06); border:1px solid rgba(59,130,246,0.2);  border-radius:12px; padding:0.75rem 1rem; }
+
+  /* ── Layout ── */
+  .cols-2 { display:grid; grid-template-columns:1fr 1fr; gap:0.65rem; }
+  .cols-3 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:0.55rem; }
+
+  /* ── Step badge ── */
+  .step-badge {
+    display:inline-flex; align-items:center; gap:6px;
+    background:var(--g3); border:1px solid var(--g4);
+    border-radius:999px; padding:3px 12px;
+    font-size:0.65rem; font-weight:700; color:var(--g);
+    margin-bottom:0.5rem; letter-spacing:0.06em; text-transform:uppercase;
+  }
+
+  /* ── Formula box ── */
+  .formula {
+    background:#0d1117; border:1px solid rgba(255,255,255,0.07);
+    border-radius:10px; padding:0.6rem 0.9rem;
+    font-family:'Fira Code','Consolas',monospace;
+    font-size:0.68rem; color:#7ee787; line-height:1.8;
+  }
+
+  /* ── Divider ── */
+  .div { height:1px; background:linear-gradient(90deg,transparent,rgba(34,197,94,0.25),transparent); margin:0.6rem 0; }
+
+  /* ── Big quote ── */
+  .say {
+    background:rgba(34,197,94,0.04); border-left:3px solid var(--g);
+    border-radius:0 10px 10px 0; padding:0.7rem 1rem;
+    font-size:0.78rem; color:#ddd; line-height:1.7; font-style:italic;
+  }
+
+  /* ── Score bar ── */
+  .bar-wrap { margin:0.3rem 0; }
+  .bar-label { display:flex; justify-content:space-between; font-size:0.65rem; color:#888; margin-bottom:3px; }
+  .bar-track { height:5px; background:rgba(255,255,255,0.06); border-radius:4px; overflow:hidden; }
+  .bar-fill  { height:100%; border-radius:4px; }
+
+  /* ── Tag ── */
+  .tag { display:inline-block; padding:2px 9px; border-radius:999px; font-size:0.62rem; font-weight:700; margin:2px; }
+  .tag-g { background:rgba(34,197,94,0.1); border:1px solid rgba(34,197,94,0.25); color:#4ade80; }
+  .tag-r { background:rgba(239,68,68,0.1); border:1px solid rgba(239,68,68,0.25); color:#f87171; }
+  .tag-y { background:rgba(234,179,8,0.1);  border:1px solid rgba(234,179,8,0.25);  color:#fbbf24; }
+  .tag-p { background:rgba(168,85,247,0.1); border:1px solid rgba(168,85,247,0.25); color:#c084fc; }
+  .tag-b { background:rgba(59,130,246,0.1); border:1px solid rgba(59,130,246,0.25); color:#93c5fd; }
+
+  /* ── Section label ── */
+  .label { font-size:0.6rem; font-weight:700; text-transform:uppercase; letter-spacing:0.12em; color:var(--g); margin-bottom:0.3rem; }
+</style>
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+
+
+<!-- ══════════════════════════════════════════════════════════
+     0 · OPENING HOOK
+══════════════════════════════════════════════════════════════ -->
+<section>
+  <div class="label">Opening</div>
+  <h2>Start with this scenario — before touching the app</h2>
+
+  <div class="say" style="margin:0.7rem 0 0.9rem">
+    "Imagine you see NVDA trending on Reddit — up 18%, 200 articles in 24 hours.
+    Is this real news driving the price, or just hype?
+    You open Yahoo Finance — you see a chart.
+    You open Google — you see a wall of articles.
+    <span class="w">Nothing tells you whether this attention is real or manufactured.</span>
+    That gap is exactly what MarketNoise fills."
+  </div>
+
+  <div class="cols-3">
+    <div class="card-r">
+      <h3 style="color:#f87171;font-size:0.78rem">❌ Problem 1</h3>
+      <p style="font-size:0.7rem">Information overload — no signal vs noise filter</p>
+    </div>
+    <div class="card-y">
+      <h3 style="color:#fbbf24;font-size:0.78rem">❌ Problem 2</h3>
+      <p style="font-size:0.7rem">Hype traps — retail buys the peak, sells the crash</p>
+    </div>
+    <div class="card-g">
+      <h3 style="font-size:0.78rem">✅ Our answer</h3>
+      <p style="font-size:0.7rem">Transparent, quantified narrative intelligence</p>
+    </div>
+  </div>
+
+  <div class="div"></div>
+  <p class="m" style="font-size:0.68rem">Then introduce the product name and navigate to the app ↓</p>
+</section>
+
+
+<!-- ══════════════════════════════════════════════════════════
+     1 · HOMEPAGE
+══════════════════════════════════════════════════════════════ -->
+<section>
+  <div class="step-badge">Step 1 · Homepage</div>
+  <h2>Show the homepage — don't navigate yet</h2>
+
+  <div class="say" style="margin:0.5rem 0 0.8rem">
+    "This is the homepage. Search bar front and center — any US ticker.
+    Below it: a live narrative feed of stocks currently getting the most attention.
+    Daily challenge on the side — that's our optional gamification layer.
+    <span class="w">Zero login required.</span> Any user gets full analysis immediately."
+  </div>
+
+  <div class="cols-2">
+    <div class="card">
+      <h3>What to point at</h3>
+      <ul>
+        <li>Search bar — "main entry point"</li>
+        <li>Market Pulse feed — "ranked by narrative activity"</li>
+        <li>Daily Challenge card — "gamification, optional"</li>
+        <li>Popular ticker pills — "quick access"</li>
+      </ul>
+    </div>
+    <div class="card-g">
+      <h3>Key point to land</h3>
+      <p style="font-size:0.75rem">Steps 1–3 need <span class="w">no login</span>. All analysis is public. Login only gates Chat + Watchlist → lower barrier for new users.</p>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════════════════════
+     2 · SEARCH
+══════════════════════════════════════════════════════════════ -->
+<section>
+  <div class="step-badge">Step 2 · Search</div>
+  <h2>Type "NVDA" — show autocomplete</h2>
+
+  <div class="say" style="margin:0.5rem 0 0.8rem">
+    "Autocomplete pulls from <span class="w">Twelve Data's symbol API</span> in real time —
+    full company names, not just tickers. Cached so repeat searches are instant."
+  </div>
+
+  <div class="div"></div>
+
+  <div class="cols-2" style="margin-top:0.3rem">
+    <div class="card">
+      <h3>Behind the scenes</h3>
+      <ul>
+        <li>Frontend debounces input → hits <code style="color:var(--g);font-size:0.65rem">/api/market/search/?q=</code></li>
+        <li>Django queries Twelve Data API</li>
+        <li>Results cached 30 min in Redis</li>
+        <li>Returns ticker + shortName + exchange</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>Then hit enter →</h3>
+      <p style="font-size:0.72rem">Navigates to <code style="color:var(--g);font-size:0.65rem">/stock/NVDA</code>. Django checks Redis — if cached (15 min TTL) returns instantly. If not, runs the full pipeline.</p>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════════════════════
+     3 · STOCK HEADER + CHART
+══════════════════════════════════════════════════════════════ -->
+<section>
+  <div class="step-badge">Step 3 · Price Chart</div>
+  <h2>Show header, then click through chart ranges</h2>
+
+  <div class="say" style="margin:0.5rem 0 0.8rem">
+    "Live price from Twelve Data. The change badge <span class="w">updates as I switch ranges</span> —
+    on 3M it shows the 3-month return, not today's move. Small detail, but it gives real context."
+  </div>
+
+  <div class="cols-3">
+    <div class="card">
+      <h3>Data source</h3>
+      <p style="font-size:0.7rem">Twelve Data API — OHLCV timeseries. Cached 10 min. Reconnects on stale.</p>
+    </div>
+    <div class="card">
+      <h3>Click order</h3>
+      <p style="font-size:0.7rem">1D → 7D → 1M → 3M. Each fires <code style="color:var(--g);font-size:0.63rem">onRangeChange</code> callback → updates price badge.</p>
+    </div>
+    <div class="card-g">
+      <h3>Also mention</h3>
+      <p style="font-size:0.7rem">WatchButton next to ticker — "I'll demo that at the end." Keep moving.</p>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════════════════════
+     4 · FINBERT / SENTIMENT
+══════════════════════════════════════════════════════════════ -->
+<section>
+  <div class="step-badge">Step 4 · Sentiment Score — spend time here</div>
+  <h2>FinBERT — how it works</h2>
+
+  <div class="cols-2" style="gap:0.7rem">
+    <div>
+      <div class="card-r" style="margin-bottom:0.6rem">
+        <h3 style="color:#f87171;font-size:0.78rem">❌ VADER (general NLP)</h3>
+        <p style="font-size:0.7rem">"Beat estimates but <span class="r">cut</span> guidance" → reads <span class="r">NEGATIVE</span> because of the word "cut"</p>
+        <p style="font-size:0.65rem;color:#666;margin-top:0.3rem">Rule-based word dictionary. No context awareness.</p>
+      </div>
+      <div class="card-g">
+        <h3 style="font-size:0.78rem">✅ FinBERT (financial BERT)</h3>
+        <p style="font-size:0.7rem">Same sentence → reads <span class="g">POSITIVE</span>. Understands earnings language, guidance context.</p>
+        <p style="font-size:0.65rem;color:#555;margin-top:0.3rem">Fine-tuned on 100k+ Reuters, earnings calls, Financial PhraseBank. <span class="g">87% accuracy</span> vs VADER's 65%.</p>
+      </div>
+    </div>
+    <div>
+      <div class="card" style="margin-bottom:0.6rem">
+        <h3 style="font-size:0.78rem">Output per article</h3>
+        <div class="bar-wrap">
+          <div class="bar-label"><span>Positive</span><span class="g">0.82</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width:82%;background:var(--g)"></div></div>
+        </div>
+        <div class="bar-wrap">
+          <div class="bar-label"><span>Negative</span><span class="r">0.10</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width:10%;background:var(--r)"></div></div>
+        </div>
+        <div class="bar-wrap">
+          <div class="bar-label"><span>Neutral</span><span class="m">0.08</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width:8%;background:#555"></div></div>
+        </div>
+        <p style="font-size:0.65rem;margin-top:0.5rem">Compound: <span class="g">+0.72</span> &nbsp;·&nbsp; Label: <span class="g">Positive</span></p>
+      </div>
+      <div class="card">
+        <h3 style="font-size:0.78rem">Exponential decay weighting</h3>
+        <div class="formula">weight = e^(−λ × age_days)
+λ = ln(2) / 3  &nbsp;← half-life 3 days
+avg = Σ(score×weight) / Σ(weights)</div>
+        <p style="font-size:0.65rem;margin-top:0.4rem;color:#666">Today = full weight. 3 days ago = half. 6 days ago = quarter.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════════════════════
+     4B · FINBERT TECHNICAL DEEP DIVE
+══════════════════════════════════════════════════════════════ -->
+<section>
+  <div class="step-badge">Step 4 · FinBERT — if asked for more depth</div>
+  <h2>How BERT actually works</h2>
+
+  <div class="cols-2" style="gap:0.7rem">
+    <div>
+      <div class="card" style="margin-bottom:0.6rem">
+        <h3>BERT = Bidirectional Transformer</h3>
+        <ul>
+          <li>Reads entire sentence <span class="w">both directions at once</span></li>
+          <li>Not left-to-right like older RNNs</li>
+          <li>"cut" means different things depending on surrounding words — BERT knows this</li>
+          <li>Pre-trained on Wikipedia + books (general English)</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Fine-tuning = domain adaptation</h3>
+        <ul>
+          <li>Take pre-trained BERT</li>
+          <li>Continue training on financial text</li>
+          <li>Reuters, earnings calls, analyst reports, Financial PhraseBank</li>
+          <li>Result: model understands <span class="g">financial context</span></li>
+        </ul>
+      </div>
+    </div>
+    <div>
+      <div class="card" style="margin-bottom:0.6rem">
+        <h3>In production</h3>
+        <ul>
+          <li><span class="g">Singleton</span> — loads once (440MB), stays in memory</li>
+          <li><span class="g">Batch inference</span> — 32 articles at once, ~10× faster</li>
+          <li>Auto-detects <span class="g">GPU</span> (Apple MPS / CUDA) → CPU fallback</li>
+          <li>First call 2–5s. After Redis cache: &lt;100ms</li>
+        </ul>
+      </div>
+      <div class="card-g">
+        <h3>Accuracy benchmark</h3>
+        <p style="font-size:0.72rem">Financial PhraseBank dataset:</p>
+        <p style="font-size:0.78rem;margin:0.3rem 0"><span class="g">FinBERT: 87%</span></p>
+        <p style="font-size:0.72rem;color:#777">General BERT: 72% &nbsp;·&nbsp; VADER: 65%</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════════════════════
+     5 · NARRATIVE VELOCITY
+══════════════════════════════════════════════════════════════ -->
+<section>
+  <div class="step-badge">Step 5 · Narrative Velocity</div>
+  <h2>Rate of attention change — not just volume</h2>
+
+  <div class="say" style="margin:0.5rem 0 0.8rem">
+    "Velocity measures how fast coverage is changing, not just how much there is.
+    Spikes in velocity often <span class="w">precede price reversals</span> —
+    retail attention peaks right before the narrative collapses."
+  </div>
+
+  <div class="cols-2">
+    <div class="card">
+      <h3>The formula</h3>
+      <div class="formula">velocity = (count_last_24h − count_prior_24h)
+           / max(count_prior_24h, 1) × 100
+
+e.g. 10 → 20 articles = velocity +100
+     20 → 10 articles = velocity −50</div>
+      <div style="margin-top:0.6rem;display:flex;gap:0.4rem;flex-wrap:wrap">
+        <span class="tag tag-g">Accelerating  &gt;+20%</span>
+        <span class="tag tag-b">Stable  ±20%</span>
+        <span class="tag tag-r">Decelerating  &lt;−20%</span>
+      </div>
+    </div>
+    <div>
+      <div class="card" style="margin-bottom:0.6rem">
+        <h3>Why it matters</h3>
+        <ul>
+          <li>High velocity + high hype = overheated narrative</li>
+          <li>Attention spikes are leading, not lagging indicators</li>
+          <li>GME 2021: velocity hit extreme before price peaked</li>
+        </ul>
+      </div>
+      <div class="card-g">
+        <h3>What to say</h3>
+        <p style="font-size:0.72rem">"Volume alone doesn't tell you direction. A stock with 5 articles is fine. The same stock going from 5 to 50 articles overnight is a different story."</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════════════════════
+     6 · HYPE SCORE
+══════════════════════════════════════════════════════════════ -->
+<section>
+  <div class="step-badge">Step 6 · Hype Score</div>
+  <h2>3-Factor model — 0 to 100</h2>
+
+  <div class="cols-3" style="gap:0.55rem;margin-bottom:0.6rem">
+    <div class="card-r">
+      <h3 style="color:#f87171;font-size:0.8rem">Factor 1 · Imbalance</h3>
+      <p style="font-size:0.68rem">Up to <span class="r">40 pts</span></p>
+      <div class="formula" style="font-size:0.6rem">(dominant_ratio − 0.5)
+× 2 × 40</div>
+      <p style="font-size:0.65rem;margin-top:0.35rem;color:#777">90% bullish = suspicious. Healthy = balanced.</p>
+    </div>
+    <div class="card-p">
+      <h3 style="color:#c084fc;font-size:0.8rem">Factor 2 · Velocity</h3>
+      <p style="font-size:0.68rem">Up to <span class="p">35 pts</span></p>
+      <div class="formula" style="font-size:0.6rem">min(velocity/100, 1.0)
+× 35</div>
+      <p style="font-size:0.65rem;margin-top:0.35rem;color:#777">Fast attention is itself a hype signal.</p>
+    </div>
+    <div class="card-b">
+      <h3 style="color:#60a5fa;font-size:0.8rem">Factor 3 · Concentration</h3>
+      <p style="font-size:0.68rem">Up to <span class="b">25 pts</span></p>
+      <div class="formula" style="font-size:0.6rem">max(0, 1 − sources/total)
+× 25</div>
+      <p style="font-size:0.65rem;margin-top:0.35rem;color:#777">2 outlets ≠ 20 independent confirmations.</p>
+    </div>
+  </div>
+
+  <div class="cols-4" style="gap:0.5rem">
+    <div class="card" style="text-align:center;padding:0.5rem">
+      <p style="font-size:0.72rem;margin:0;color:#22c55e">🟢 Low</p>
+      <p style="font-size:0.65rem;color:#666;margin:0">&lt; 20</p>
+    </div>
+    <div class="card" style="text-align:center;padding:0.5rem">
+      <p style="font-size:0.72rem;margin:0;color:#60a5fa">🔵 Moderate</p>
+      <p style="font-size:0.65rem;color:#666;margin:0">20 – 45</p>
+    </div>
+    <div class="card" style="text-align:center;padding:0.5rem">
+      <p style="font-size:0.72rem;margin:0;color:#fbbf24">🟡 High</p>
+      <p style="font-size:0.65rem;color:#666;margin:0">45 – 70</p>
+    </div>
+    <div class="card" style="text-align:center;padding:0.5rem">
+      <p style="font-size:0.72rem;margin:0;color:#ef4444">🔴 Extreme</p>
+      <p style="font-size:0.65rem;color:#666;margin:0">&gt; 70</p>
+    </div>
+  </div>
+  <p class="m" style="font-size:0.65rem;margin-top:0.4rem">GameStop Jan 2021 would have scored Extreme on all 3 factors simultaneously.</p>
+  <style>.cols-4{display:grid;grid-template-columns:repeat(4,1fr);gap:0.5rem}</style>
+</section>
+
+
+<!-- ══════════════════════════════════════════════════════════
+     7 · PATTERN CLASSIFIER
+══════════════════════════════════════════════════════════════ -->
+<section>
+  <div class="step-badge">Step 7 · Pattern Archetype</div>
+  <h2>6 narrative archetypes — rule-based, fully explainable</h2>
+
+  <div class="cols-2" style="gap:0.55rem">
+    <div>
+      <div class="card" style="border-left:3px solid var(--r);margin-bottom:0.45rem;padding:0.55rem 0.8rem">
+        <p style="margin:0;font-size:0.72rem"><span class="r">🔥 Short Squeeze Dynamics</span> — <span class="tag tag-r">Extreme</span></p>
+        <p style="font-size:0.63rem;color:#666;margin:0.2rem 0 0">Compound &gt;+0.4 · Accelerating · Imbalance &gt;75% · Hype &gt;65. GME/AMC pattern.</p>
+      </div>
+      <div class="card" style="border-left:3px solid #f97316;margin-bottom:0.45rem;padding:0.55rem 0.8rem">
+        <p style="margin:0;font-size:0.72rem"><span class="y">😨 Macro Fear</span> — <span class="tag tag-r">High</span></p>
+        <p style="font-size:0.63rem;color:#666;margin:0.2rem 0 0">Sustained negative &lt;−0.2 · Broad multi-source · Hype &gt;45. Fed decisions, regulation.</p>
+      </div>
+      <div class="card" style="border-left:3px solid var(--y);margin-bottom:0.45rem;padding:0.55rem 0.8rem">
+        <p style="margin:0;font-size:0.72rem"><span class="y">🌊 Theme/Sector Wave</span> — <span class="tag tag-y">High</span></p>
+        <p style="font-size:0.63rem;color:#666;margin:0.2rem 0 0">Positive · Accelerating · Diverse sources · Hype &gt;40. AI boom, clean energy.</p>
+      </div>
+    </div>
+    <div>
+      <div class="card" style="border-left:3px solid var(--b);margin-bottom:0.45rem;padding:0.55rem 0.8rem">
+        <p style="margin:0;font-size:0.72rem"><span class="b">📉 Narrative Cool-off</span> — <span class="tag tag-b">Moderate</span></p>
+        <p style="font-size:0.63rem;color:#666;margin:0.2rem 0 0">Velocity decelerating · Was high hype · Coverage thinning. Story fading.</p>
+      </div>
+      <div class="card" style="border-left:3px solid var(--p);margin-bottom:0.45rem;padding:0.55rem 0.8rem">
+        <p style="margin:0;font-size:0.72rem"><span class="p">⏳ Pre-Catalyst Build</span> — <span class="tag tag-p">Moderate</span></p>
+        <p style="font-size:0.63rem;color:#666;margin:0.2rem 0 0">Mentions accelerating · Tone stays neutral. Earnings/FDA/product launch coming.</p>
+      </div>
+      <div class="card" style="border-left:3px solid var(--g);padding:0.55rem 0.8rem">
+        <p style="margin:0;font-size:0.72rem"><span class="g">✅ Balanced Coverage</span> — <span class="tag tag-g">Low</span></p>
+        <p style="font-size:0.63rem;color:#666;margin:0.2rem 0 0">No unusual signals. Diversified sources. Healthy information flow.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="div"></div>
+  <p class="m" style="font-size:0.65rem">Rule-based not ML → <span class="g">fully explainable</span>. We show users exactly which conditions fired. No black box.</p>
+</section>
+
+
+<!-- ══════════════════════════════════════════════════════════
+     8 · AI NARRATIVE SUMMARY
+══════════════════════════════════════════════════════════════ -->
+<section>
+  <div class="step-badge">Step 8 · AI Narrative Summary</div>
+  <h2>Read the summary card aloud</h2>
+
+  <div class="say" style="margin:0.5rem 0 0.8rem">
+    "Below the cards is an AI-generated summary. <span class="w">Gemini reads the actual data</span> we computed —
+    sentiment, velocity, hype, pattern, recent headlines — and writes a plain-English paragraph.
+    No speculation. No price prediction. Just what the data says."
+  </div>
+
+  <div class="cols-2">
+    <div class="card">
+      <h3>What goes into the prompt</h3>
+      <ul>
+        <li>Current sentiment score + label</li>
+        <li>Velocity score + trend direction</li>
+        <li>Hype score + level</li>
+        <li>Pattern archetype name</li>
+        <li>Last 5 news headlines</li>
+        <li>Explicit: "no trading advice"</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>Technical details</h3>
+      <ul>
+        <li>LLM: Gemini preferred → Groq fallback</li>
+        <li>Cached 15 min in Redis (LLM calls cost money)</li>
+        <li>Server uses env var API keys → all users see this</li>
+        <li>Different from Chat — no user key needed here</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════════════════════
+     9 · NARRATIVE TIMELINE
+══════════════════════════════════════════════════════════════ -->
+<section>
+  <div class="step-badge">Step 9 · Narrative Timeline</div>
+  <h2>91-day drift chart — how the story evolved</h2>
+
+  <div class="say" style="margin:0.5rem 0 0.8rem">
+    "Most tools show today's sentiment. We show you <span class="w">the whole 91-day story</span>.
+    We also detect exactly when the narrative shifted direction and annotate it on the chart."
+  </div>
+
+  <div class="cols-2">
+    <div class="card">
+      <h3>How drift detection works</h3>
+      <ul>
+        <li>Daily aggregate = weighted avg of all article scores that day</li>
+        <li>Rolling windows: 7d · 30d · 90d</li>
+        <li>Compare window avg to prior window avg</li>
+        <li>If shift &gt; <span class="g">0.15 compound points</span> → flag as narrative shift</li>
+        <li>Annotate the date on the chart</li>
+      </ul>
+    </div>
+    <div>
+      <div class="card" style="margin-bottom:0.55rem">
+        <h3>Window stats below chart</h3>
+        <p style="font-size:0.7rem">7d avg · 30d avg · 90d avg with improving / worsening / stable label. Quick at-a-glance context.</p>
+      </div>
+      <div class="card-g">
+        <h3>What to say</h3>
+        <p style="font-size:0.7rem">"You can see if this stock's bullish run started 3 weeks ago, or if it's been declining for a month. Context no other retail tool gives you."</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════════════════════
+     10 · AI CHAT
+══════════════════════════════════════════════════════════════ -->
+<section>
+  <div class="step-badge">Step 10 · AI Chat Panel</div>
+  <h2>Type: "What is driving the current sentiment for NVDA?"</h2>
+
+  <div class="say" style="margin:0.5rem 0 0.8rem">
+    "The chat knows the current state of this stock — sentiment, velocity, hype, pattern, headlines.
+    It's not giving a generic answer. It's answering <span class="w">based on data we computed today</span>.
+    User brings their own API key. We store it encrypted."
+  </div>
+
+  <div class="cols-2">
+    <div class="card">
+      <h3>Context injected per message</h3>
+      <ul>
+        <li>Sentiment compound + label</li>
+        <li>Velocity score + trend</li>
+        <li>Hype score + level</li>
+        <li>Pattern archetype</li>
+        <li>Last 5 article headlines</li>
+        <li>Explicit: "no trading advice" instruction</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>🔐 API Key security</h3>
+      <ul>
+        <li>User's Gemini / Groq key stored encrypted</li>
+        <li><span class="g">Fernet</span> symmetric encryption (AES-128-CBC)</li>
+        <li>Secret key lives in env var, not DB</li>
+        <li>Decrypted only in memory at call time</li>
+        <li>Never logged · Never returned via API</li>
+        <li>+20 XP fires on each message sent</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════════════════════
+     11 · WATCHLIST
+══════════════════════════════════════════════════════════════ -->
+<section>
+  <div class="step-badge">Step 11 · Watchlist</div>
+  <h2>Click WatchButton → navigate to /watchlist</h2>
+
+  <div class="say" style="margin:0.5rem 0 0.8rem">
+    "Green glow + toast on save. The watchlist shows all saved tickers with their
+    <span class="w">current signals</span> — sentiment, velocity, hype at a glance.
+    JWT-authenticated — backend returns only this user's entries."
+  </div>
+
+  <div class="cols-3">
+    <div class="card">
+      <h3>Auth flow</h3>
+      <ul>
+        <li>Short-lived <span class="g">access token</span></li>
+        <li>Long-lived <span class="g">refresh token</span></li>
+        <li>Silent refresh via Axios interceptor</li>
+        <li>User never gets logged out</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>Endpoints</h3>
+      <ul>
+        <li><code style="color:var(--g);font-size:0.63rem">GET /api/market/watchlist/</code></li>
+        <li><code style="color:var(--g);font-size:0.63rem">POST /api/market/watchlist/</code></li>
+        <li><code style="color:var(--g);font-size:0.63rem">DELETE /api/market/watchlist/</code></li>
+        <li>All require JWT Bearer token</li>
+      </ul>
+    </div>
+    <div class="card-g">
+      <h3>Spring animation</h3>
+      <p style="font-size:0.7rem">WatchButton has a CSS spring-bounce + green glow on save. Small detail that makes the UI feel alive.</p>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════════════════════
+     12 · GAMIFICATION
+══════════════════════════════════════════════════════════════ -->
+<section>
+  <div class="step-badge">Step 12 · Gamification — show quickly</div>
+  <h2>Optional XP system — fully toggle-able</h2>
+
+  <div class="cols-3" style="margin-top:0.4rem">
+    <div class="card">
+      <h3>XP actions</h3>
+      <ul>
+        <li>Search: <span class="g">+10</span></li>
+        <li>Visit page: <span class="g">+15</span></li>
+        <li>Chart range: <span class="g">+5</span></li>
+        <li>Chat message: <span class="g">+20</span></li>
+        <li>News click: <span class="g">+10</span></li>
+        <li>Daily challenge: <span class="g">+50</span></li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>Missions + Badges</h3>
+      <ul>
+        <li>5 missions (one-time)</li>
+        <li>3 badges (threshold)</li>
+        <li>Confetti on milestone</li>
+        <li>XPToast on every action</li>
+      </ul>
+    </div>
+    <div class="card-g">
+      <h3>Design decision</h3>
+      <p style="font-size:0.7rem"><span class="g">localStorage</span> only — no backend, no migration, no login required. useReducer + Context API. Survives refresh. Easy to migrate to DB later.</p>
+    </div>
+  </div>
+
+  <div class="div"></div>
+  <div class="say" style="padding:0.55rem 0.9rem">
+    "Encourages users to explore more deeply. Optional — can be fully turned off. No impact on core analysis."
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════════════════════
+     13 · FULL PIPELINE (if asked)
+══════════════════════════════════════════════════════════════ -->
+<section>
+  <div class="step-badge">Technical deep dive — if asked</div>
+  <h2>End-to-end backend pipeline</h2>
+
+  <div class="cols-2" style="gap:0.7rem">
+    <div>
+      <div class="card" style="margin-bottom:0.55rem">
+        <h3>Background (Celery — every 30 min)</h3>
+        <ul>
+          <li>Celery Beat fires one task per active ticker</li>
+          <li>Tasks run <span class="g">in parallel</span> (worker pool)</li>
+          <li>Scrapers: RSS (∞) · GNews (100/day) · Reddit</li>
+          <li>Dedup by URL — DB unique constraint</li>
+          <li>Batch FinBERT on new articles (32 at a time)</li>
+          <li>Store SentimentScore per Narrative</li>
+          <li>Create PriceImpact → schedule 1h/4h/24h price checks</li>
+        </ul>
+      </div>
+    </div>
+    <div>
+      <div class="card" style="margin-bottom:0.55rem">
+        <h3>On-demand (per request)</h3>
+        <ul>
+          <li>Check Redis → if hit, return &lt;100ms</li>
+          <li>If miss: query last 20 articles from DB</li>
+          <li>Score any unscored articles via FinBERT</li>
+          <li>Compute weighted avg sentiment</li>
+          <li>Compute velocity (SQL aggregation)</li>
+          <li>Compute 3-factor hype score</li>
+          <li>Classify pattern (rule-based)</li>
+          <li>Cache result 15 min → return</li>
+        </ul>
+      </div>
+      <div class="card-g">
+        <h3>Cache TTLs</h3>
+        <p style="font-size:0.68rem">Quote: 10m · Chart: 10m · Analysis: 15m · Drift: 30m · Summary: 15m · Search: 30m</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════════════════════
+     14 · CLOSING
+══════════════════════════════════════════════════════════════ -->
+<section>
+  <div class="step-badge">Closing</div>
+  <h2>Wrap up — then open for questions</h2>
+
+  <div class="say" style="margin:0.6rem 0 0.9rem">
+    "That's MarketNoise. The core thesis: retail investors deserve to understand the <span class="w">narrative context</span>
+    around a stock — not just the price chart. We built a full-stack platform using React, Django, FinBERT, and Celery
+    that quantifies sentiment, velocity, and hype with <span class="w">transparent, explainable scores</span>.
+    Not a black-box prediction. Not a buy or sell signal. Just honest intelligence about what the story is
+    and whether it's real. <span class="w">Happy to take questions.</span>"
+  </div>
+
+  <div class="div"></div>
+
+  <div class="cols-3">
+    <div class="card" style="text-align:center;padding:0.7rem 0.5rem">
+      <p style="font-size:1.4rem;font-weight:900;color:var(--g);margin:0">20+</p>
+      <p style="font-size:0.62rem;color:#555;margin:0">REST endpoints</p>
+    </div>
+    <div class="card" style="text-align:center;padding:0.7rem 0.5rem">
+      <p style="font-size:1.4rem;font-weight:900;color:var(--g);margin:0">87%</p>
+      <p style="font-size:0.62rem;color:#555;margin:0">FinBERT accuracy</p>
+    </div>
+    <div class="card" style="text-align:center;padding:0.7rem 0.5rem">
+      <p style="font-size:1.4rem;font-weight:900;color:var(--g);margin:0">91 days</p>
+      <p style="font-size:0.62rem;color:#555;margin:0">Narrative timeline</p>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════════════════════
+     15 · Q&A CHEAT SHEET
+══════════════════════════════════════════════════════════════ -->
+<section>
+  <div class="step-badge">Q&amp;A — keep this slide up</div>
+  <h2>Quick answers for tough questions</h2>
+
+  <div class="cols-2" style="gap:0.6rem">
+    <div>
+      <div class="card" style="margin-bottom:0.5rem;padding:0.6rem 0.8rem">
+        <h3 style="font-size:0.72rem;color:#fbbf24">Different from Yahoo Finance?</h3>
+        <p style="font-size:0.67rem;margin:0">They show charts + articles. We add: sentiment scoring, velocity, 3-factor hype, 6 pattern archetypes, 91-day drift. A narrative layer that doesn't exist there.</p>
+      </div>
+      <div class="card" style="margin-bottom:0.5rem;padding:0.6rem 0.8rem">
+        <h3 style="font-size:0.72rem;color:#fbbf24">Why not just ChatGPT?</h3>
+        <p style="font-size:0.67rem;margin:0">ChatGPT gives prose. We need structured numbers — compound scores, velocity %, hype 0–100 — to chart, trend, and compare over 91 days. LLMs only used where prose is right output.</p>
+      </div>
+      <div class="card" style="padding:0.6rem 0.8rem">
+        <h3 style="font-size:0.72rem;color:#fbbf24">Isn't predicting markets impossible?</h3>
+        <p style="font-size:0.67rem;margin:0">Yes — which is why we don't. No price predictions. ML classifier is experimental + labeled as such. We explain narratives, not forecast prices.</p>
+      </div>
+    </div>
+    <div>
+      <div class="card" style="margin-bottom:0.5rem;padding:0.6rem 0.8rem">
+        <h3 style="font-size:0.72rem;color:#fbbf24">FinBERT accuracy?</h3>
+        <p style="font-size:0.67rem;margin:0">87% on Financial PhraseBank vs VADER 65% / general BERT 72%. Handles earnings language, guidance cuts, analyst upgrades — patterns VADER misses entirely.</p>
+      </div>
+      <div class="card" style="margin-bottom:0.5rem;padding:0.6rem 0.8rem">
+        <h3 style="font-size:0.72rem;color:#fbbf24">Biggest technical challenge?</h3>
+        <p style="font-size:0.67rem;margin:0">Running 440MB FinBERT without per-request lag. Fixed with: singleton loader + batch inference (32×) + Redis caching. Most requests never touch the model.</p>
+      </div>
+      <div class="card" style="padding:0.6rem 0.8rem">
+        <h3 style="font-size:0.72rem;color:#fbbf24">Why rule-based patterns not ML?</h3>
+        <p style="font-size:0.67rem;margin:0">Explainability + no labeled training data. Users see exactly which conditions fired. Can migrate to ML when we have thousands of labeled examples.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+</div><!-- /slides -->
+</div><!-- /reveal -->
+
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.js"></script>
+<script>
+  Reveal.initialize({
+    hash: true,
+    slideNumber: 'c/t',
+    transition: 'slide',
+    transitionSpeed: 'fast',
+    backgroundTransition: 'none',
+    controls: true,
+    progress: true,
+    center: false,
+    width: 1280,
+    height: 720,
+    margin: 0.03,
+    keyboard: {
+      39: 'next',
+      37: 'prev',
+      78: 'next',
+      80: 'prev',
+    }
+  });
+</script>
+</body>
+</html>

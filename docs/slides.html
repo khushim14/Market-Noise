@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>MarketNoise</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reset.css"/>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.css"/>
+<style>
+*{box-sizing:border-box}
+:root{--g:#22c55e;--r:#ef4444;--y:#eab308;--p:#a855f7;--b:#3b82f6}
+.reveal{font-family:'Segoe UI',system-ui,sans-serif;background:#0a0a0a;color:#e5e5e5}
+.reveal .slides section{text-align:left;padding:0 2.5rem}
+.reveal h1,.reveal h2,.reveal h3{text-transform:none;letter-spacing:-0.02em;font-weight:800;color:#fff}
+.reveal h1{font-size:2.8rem}
+.reveal h2{font-size:2rem;margin-bottom:0.8rem}
+.reveal h3{font-size:1.1rem;color:var(--g);margin-bottom:0.4rem}
+.reveal p{font-size:0.88rem;line-height:1.75;color:#ccc;margin:0 0 0.5rem}
+.reveal ul{list-style:none;padding:0;margin:0}
+.reveal li{font-size:0.85rem;line-height:1.75;color:#ccc;padding-left:1.2rem;position:relative;margin-bottom:0.15rem}
+.reveal li::before{content:"›";color:var(--g);position:absolute;left:0;font-weight:900}
+.reveal li b{color:#fff}
+.reveal .progress{color:var(--g)}
+.reveal .controls{color:var(--g)}
+.reveal .slide-number{color:#444;font-size:0.65rem;background:transparent}
+
+/* helpers */
+.g{color:var(--g);font-weight:700}
+.r{color:var(--r);font-weight:700}
+.y{color:var(--y);font-weight:700}
+.p{color:#c084fc;font-weight:700}
+.b{color:#60a5fa;font-weight:700}
+.w{color:#fff;font-weight:700}
+.muted{color:#666}
+
+/* layout */
+.row{display:flex;gap:1rem;align-items:flex-start}
+.col{flex:1}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:0.9rem}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.75rem}
+
+/* card */
+.c{background:#1a1a1a;border:1px solid rgba(255,255,255,0.07);border-radius:14px;padding:0.9rem 1.1rem}
+.cg{background:rgba(34,197,94,0.07);border:1px solid rgba(34,197,94,0.25);border-radius:14px;padding:0.9rem 1.1rem}
+.cr{background:rgba(239,68,68,0.06);border:1px solid rgba(239,68,68,0.2);border-radius:14px;padding:0.9rem 1.1rem}
+.cy{background:rgba(234,179,8,0.06);border:1px solid rgba(234,179,8,0.2);border-radius:14px;padding:0.9rem 1.1rem}
+
+/* divider */
+.div{height:1px;background:linear-gradient(90deg,transparent,rgba(34,197,94,0.3),transparent);margin:0.7rem 0}
+
+/* big stat */
+.stat{font-size:2.4rem;font-weight:900;color:var(--g);line-height:1}
+.stat-s{font-size:0.62rem;color:#555;margin-top:2px}
+
+/* formula */
+.f{background:#0d1117;border:1px solid rgba(255,255,255,0.06);border-radius:9px;padding:0.55rem 0.85rem;font-family:'Fira Code',monospace;font-size:0.7rem;color:#7ee787;line-height:1.8;margin-top:0.4rem}
+
+/* pill */
+.pill{display:inline-block;padding:3px 11px;border-radius:999px;font-size:0.65rem;font-weight:700;margin:2px}
+.pg{background:rgba(34,197,94,0.1);border:1px solid rgba(34,197,94,0.3);color:#4ade80}
+.pr{background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.3);color:#f87171}
+.py{background:rgba(234,179,8,0.1);border:1px solid rgba(234,179,8,0.3);color:#fbbf24}
+.pp{background:rgba(168,85,247,0.1);border:1px solid rgba(168,85,247,0.3);color:#c084fc}
+.pb{background:rgba(59,130,246,0.1);border:1px solid rgba(59,130,246,0.3);color:#93c5fd}
+
+/* center helper */
+.center{text-align:center}
+</style>
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+
+
+<!-- ① TITLE -->
+<section class="center" style="text-align:center">
+<aside class="notes">
+"Hi everyone — we built MarketNoise, a narrative intelligence platform for retail investors. The problem we're solving: when a stock is trending online, there's no easy way to tell if that attention is real news or just hype. We built a full-stack app using React, Django, and a financial NLP model called FinBERT to answer that question."
+</aside>
+  <div style="width:72px;height:72px;background:rgba(5,46,22,0.8);border:1px solid rgba(34,197,94,0.4);border-radius:18px;display:flex;align-items:center;justify-content:center;margin:0 auto 1.2rem;box-shadow:0 0 40px rgba(34,197,94,0.2)">
+    <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2.2" stroke-linecap="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+  </div>
+  <h1 style="background:linear-gradient(135deg,#4ade80,#22c55e,#16a34a);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:0.3rem">MarketNoise</h1>
+  <p style="font-size:1.1rem;color:#aaa;margin-bottom:1.4rem">Narrative Intelligence for Retail Investors</p>
+  <div style="display:flex;justify-content:center;flex-wrap:wrap;gap:0.5rem">
+    <span class="pill pg">FinBERT NLP</span>
+    <span class="pill pb">React + Django</span>
+    <span class="pill pp">Celery Pipeline</span>
+    <span class="pill py">AI Chat</span>
+    <span class="pill pr">Hype Detection</span>
+  </div>
+  <p style="margin-top:1.5rem;font-size:0.7rem;color:#333">USC · Spring 2026</p>
+</section>
+
+
+<!-- ② THE PROBLEM -->
+<section>
+<aside class="notes">
+"Start with the scenario — you see NVDA trending on Reddit, 200 articles in 24 hours. Is it real news or hype? Yahoo Finance shows you a chart. Google shows you a wall of articles. Nothing tells you whether the attention is real or manufactured. That's the gap.
+
+Four specific problems: too much noise with no filter, retail investors getting trapped buying hype peaks, general NLP tools completely misreading financial language — VADER calls 'beat estimates but cut guidance' negative, it's actually bullish — and nobody showing you how the narrative evolved over time."
+</aside>
+  <h2>The Problem</h2>
+  <div class="cr" style="margin-bottom:0.9rem;padding:0.8rem 1.1rem">
+    <p style="font-size:0.95rem;margin:0">
+      You see <span class="g">NVDA +18%</span> trending on Reddit — 200 articles in 24 hours.
+      Is this real news or just hype? <span class="r">You have no way to tell.</span>
+    </p>
+  </div>
+  <div class="g2">
+    <div class="c" style="border-left:3px solid var(--r)">
+      <h3 style="color:#f87171">📰 Information Overload</h3>
+      <p>Hundreds of articles per stock per day. No filter between real signal and social frenzy.</p>
+    </div>
+    <div class="c" style="border-left:3px solid var(--y)">
+      <h3 style="color:#fbbf24">🎢 Hype Traps</h3>
+      <p>Retail investors buy the peak, sell the crash. No tool warns them the narrative is manufactured.</p>
+    </div>
+    <div class="c" style="border-left:3px solid var(--p)">
+      <h3 style="color:#c084fc">🧠 Bad NLP</h3>
+      <p>"Beat estimates but cut guidance" → VADER calls this <span class="r">negative</span>. It's actually <span class="g">bullish</span>.</p>
+    </div>
+    <div class="c" style="border-left:3px solid var(--b)">
+      <h3 style="color:#60a5fa">⏱️ No Timeline</h3>
+      <p>Every tool shows today's sentiment. Nobody shows how the story evolved or when it shifted.</p>
+    </div>
+  </div>
+</section>
+
+
+<!-- ③ OUR SOLUTION -->
+<section>
+<aside class="notes">
+"Point at each row. We solve each problem directly.
+
+Too much noise → our Hype Score shows exactly what's manufactured with a 3-factor breakdown.
+Hype traps → Narrative Velocity detects attention spikes early, Pattern Classifier warns of Short Squeeze setups.
+Bad NLP → FinBERT trained on 100k+ financial documents, 87% accuracy vs VADER's 65%.
+No timeline → 91-day Narrative Timeline with shift detection, annotated when the story changed direction.
+
+Key message: MarketNoise tells you WHY attention is moving, not just whether the price went up."
+</aside>
+  <h2>Our Solution — each problem, answered</h2>
+  <div style="margin-top:0.6rem;display:grid;gap:0.5rem">
+
+    <div style="display:grid;grid-template-columns:1fr 36px 1fr;align-items:center;gap:0.5rem">
+      <div class="c" style="border-left:3px solid var(--r);padding:0.65rem 0.9rem"><p style="margin:0;font-size:0.75rem;color:#f87171">❌ Too much noise — can't tell signal from hype</p></div>
+      <div style="text-align:center;color:var(--g);font-size:1.2rem;font-weight:900">→</div>
+      <div class="cg" style="padding:0.65rem 0.9rem"><p style="margin:0;font-size:0.75rem;color:#4ade80">✅ Hype Score (0–100) with 3-factor breakdown — fully transparent</p></div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 36px 1fr;align-items:center;gap:0.5rem">
+      <div class="c" style="border-left:3px solid var(--y);padding:0.65rem 0.9rem"><p style="margin:0;font-size:0.75rem;color:#fbbf24">❌ Retail buys hype peaks, sells crash bottoms</p></div>
+      <div style="text-align:center;color:var(--g);font-size:1.2rem;font-weight:900">→</div>
+      <div class="cg" style="padding:0.65rem 0.9rem"><p style="margin:0;font-size:0.75rem;color:#4ade80">✅ Narrative Velocity + Pattern Classifier detects Short Squeeze setups early</p></div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 36px 1fr;align-items:center;gap:0.5rem">
+      <div class="c" style="border-left:3px solid var(--p);padding:0.65rem 0.9rem"><p style="margin:0;font-size:0.75rem;color:#c084fc">❌ General NLP misreads financial language</p></div>
+      <div style="text-align:center;color:var(--g);font-size:1.2rem;font-weight:900">→</div>
+      <div class="cg" style="padding:0.65rem 0.9rem"><p style="margin:0;font-size:0.75rem;color:#4ade80">✅ FinBERT — trained on 100k+ financial docs, 87% accuracy vs VADER's 65%</p></div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 36px 1fr;align-items:center;gap:0.5rem">
+      <div class="c" style="border-left:3px solid var(--b);padding:0.65rem 0.9rem"><p style="margin:0;font-size:0.75rem;color:#60a5fa">❌ No view of how narrative evolved over time</p></div>
+      <div style="text-align:center;color:var(--g);font-size:1.2rem;font-weight:900">→</div>
+      <div class="cg" style="padding:0.65rem 0.9rem"><p style="margin:0;font-size:0.75rem;color:#4ade80">✅ 91-day Narrative Timeline with automatic shift detection + annotations</p></div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ④ CUSTOMER JOURNEY -->
+<section>
+<aside class="notes">
+"Walk through each step.
+
+Step 1 — Homepage. Search bar, live narrative feed, daily challenge. Zero login needed.
+Step 2 — Search any ticker, autocomplete pulls from Twelve Data in real time.
+Step 3 — Stock page. Live price, chart with range selector, 4 analysis cards, AI summary.
+Step 4 — Deep analysis. 91-day timeline, news articles, shift detection.
+Step 5 — AI Chat. Sticky sidebar, context-aware, needs login + user's own API key.
+Step 6 — Watchlist. Save tickers, monitor all signals in one place.
+
+Important: steps 1–3 need no login. Login only gates Chat and Watchlist — keeps the barrier low for new users."
+</aside>
+  <h2>Customer Journey</h2>
+  <svg viewBox="0 0 820 170" style="width:100%;margin:0.6rem 0 0.7rem" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI,system-ui,sans-serif">
+    <defs>
+      <marker id="a" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto">
+        <path d="M0,0 L0,7 L7,3.5 z" fill="rgba(34,197,94,0.8)"/>
+      </marker>
+    </defs>
+    <!-- boxes -->
+    <rect x="5"   y="45" width="120" height="75" rx="11" fill="rgba(34,197,94,0.06)" stroke="rgba(34,197,94,0.3)" stroke-width="1.5"/>
+    <text x="65"  y="70"  text-anchor="middle" fill="#22c55e" font-size="20">🏠</text>
+    <text x="65"  y="89"  text-anchor="middle" fill="#fff" font-size="10" font-weight="700">Homepage</text>
+    <text x="65"  y="104" text-anchor="middle" fill="#666" font-size="8">Search · Live feed</text>
+
+    <line x1="125" y1="82" x2="148" y2="82" stroke="rgba(34,197,94,0.6)" stroke-width="1.5" marker-end="url(#a)"/>
+
+    <rect x="148" y="35" width="130" height="95" rx="11" fill="rgba(34,197,94,0.08)" stroke="rgba(34,197,94,0.4)" stroke-width="2"/>
+    <text x="213" y="62"  text-anchor="middle" fill="#22c55e" font-size="20">📈</text>
+    <text x="213" y="81"  text-anchor="middle" fill="#fff" font-size="10" font-weight="700">Stock Page</text>
+    <text x="213" y="96"  text-anchor="middle" fill="#666" font-size="8">Price · Chart</text>
+    <text x="213" y="108" text-anchor="middle" fill="#666" font-size="8">Analysis cards</text>
+    <text x="213" y="120" text-anchor="middle" fill="#22c55e" font-size="8">← core feature</text>
+
+    <line x1="278" y1="82" x2="301" y2="82" stroke="rgba(34,197,94,0.6)" stroke-width="1.5" marker-end="url(#a)"/>
+
+    <rect x="301" y="45" width="130" height="75" rx="11" fill="rgba(168,85,247,0.06)" stroke="rgba(168,85,247,0.25)" stroke-width="1.5"/>
+    <text x="366" y="70"  text-anchor="middle" fill="#c084fc" font-size="20">🔬</text>
+    <text x="366" y="89"  text-anchor="middle" fill="#fff" font-size="10" font-weight="700">Deep Analysis</text>
+    <text x="366" y="104" text-anchor="middle" fill="#666" font-size="8">Timeline · News · AI Summary</text>
+
+    <line x1="431" y1="82" x2="454" y2="82" stroke="rgba(234,179,8,0.6)" stroke-width="1.5" marker-end="url(#a)"/>
+
+    <rect x="454" y="45" width="120" height="75" rx="11" fill="rgba(234,179,8,0.05)" stroke="rgba(234,179,8,0.25)" stroke-width="1.5"/>
+    <text x="514" y="70"  text-anchor="middle" fill="#fbbf24" font-size="20">💬</text>
+    <text x="514" y="89"  text-anchor="middle" fill="#fff" font-size="10" font-weight="700">AI Chat</text>
+    <text x="514" y="104" text-anchor="middle" fill="#666" font-size="8">Context-aware · Login req.</text>
+
+    <line x1="574" y1="82" x2="597" y2="82" stroke="rgba(59,130,246,0.6)" stroke-width="1.5" marker-end="url(#a)"/>
+
+    <rect x="597" y="45" width="120" height="75" rx="11" fill="rgba(59,130,246,0.05)" stroke="rgba(59,130,246,0.25)" stroke-width="1.5"/>
+    <text x="657" y="70"  text-anchor="middle" fill="#60a5fa" font-size="20">⭐</text>
+    <text x="657" y="89"  text-anchor="middle" fill="#fff" font-size="10" font-weight="700">Watchlist</text>
+    <text x="657" y="104" text-anchor="middle" fill="#666" font-size="8">Save · Monitor signals</text>
+
+    <line x1="717" y1="82" x2="740" y2="82" stroke="rgba(34,197,94,0.4)" stroke-width="1.5" marker-end="url(#a)"/>
+    <text x="784" y="78"  text-anchor="middle" fill="#22c55e" font-size="12" font-weight="900">✓ Informed</text>
+    <text x="784" y="94"  text-anchor="middle" fill="#444" font-size="8">not just</text>
+    <text x="784" y="106" text-anchor="middle" fill="#444" font-size="8">price-watching</text>
+  </svg>
+  <div class="g3">
+    <div class="c" style="padding:0.65rem">
+      <p style="font-size:0.72rem;margin:0"><span class="g">No login needed</span> for steps 1–3. All analysis is public.</p>
+    </div>
+    <div class="c" style="padding:0.65rem">
+      <p style="font-size:0.72rem;margin:0">Login unlocks <span class="y">Chat</span> + <span class="b">Watchlist</span>. JWT auth with silent refresh.</p>
+    </div>
+    <div class="c" style="padding:0.65rem">
+      <p style="font-size:0.72rem;margin:0"><span class="p">Gamification</span> rewards every step — XP, missions, badges.</p>
+    </div>
+  </div>
+</section>
+
+
+<!-- ⑤ HOW IT WORKS (PIPELINE) -->
+<section>
+<aside class="notes">
+"Every 30 minutes, Celery — our background task scheduler — scrapes articles from 4 sources: RSS feeds which are unlimited, GNews, Reddit, and Twelve Data for prices. Articles get deduplicated by URL so we never score the same one twice.
+
+New articles go straight through FinBERT in batches of 32. Scores get stored. When a user searches a stock, we check Redis cache first — if it's there, response is under 100ms. If not, we run the full pipeline which takes 2–5 seconds the first time, then cache it for 15 minutes."
+</aside>
+  <h2>How It Works — Data Pipeline</h2>
+  <svg viewBox="0 0 820 140" style="width:100%;margin:0.5rem 0 0.6rem" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI,system-ui,sans-serif">
+    <defs>
+      <marker id="pa" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto">
+        <path d="M0,0 L0,7 L7,3.5 z" fill="rgba(34,197,94,0.7)"/>
+      </marker>
+    </defs>
+    <rect x="5"   y="35" width="115" height="65" rx="10" fill="#1a1a1a" stroke="rgba(34,197,94,0.25)" stroke-width="1.5"/>
+    <text x="62"  y="58"  text-anchor="middle" fill="#22c55e" font-size="9" font-weight="700">DATA SOURCES</text>
+    <text x="62"  y="72"  text-anchor="middle" fill="#666" font-size="8">RSS · GNews · Reddit</text>
+    <text x="62"  y="84"  text-anchor="middle" fill="#666" font-size="8">Every 30 min (Celery)</text>
+
+    <line x1="120" y1="67" x2="143" y2="67" stroke="rgba(34,197,94,0.5)" stroke-width="1.5" marker-end="url(#pa)"/>
+
+    <rect x="143" y="35" width="110" height="65" rx="10" fill="#1a1a1a" stroke="rgba(168,85,247,0.3)" stroke-width="1.5"/>
+    <text x="198" y="58"  text-anchor="middle" fill="#c084fc" font-size="9" font-weight="700">SCRAPE + DEDUP</text>
+    <text x="198" y="72"  text-anchor="middle" fill="#666" font-size="8">feedparser · PRAW</text>
+    <text x="198" y="84"  text-anchor="middle" fill="#666" font-size="8">URL unique constraint</text>
+
+    <line x1="253" y1="67" x2="276" y2="67" stroke="rgba(34,197,94,0.5)" stroke-width="1.5" marker-end="url(#pa)"/>
+
+    <rect x="276" y="25" width="130" height="85" rx="10" fill="rgba(34,197,94,0.06)" stroke="rgba(34,197,94,0.4)" stroke-width="2"/>
+    <text x="341" y="50"  text-anchor="middle" fill="#22c55e" font-size="9" font-weight="700">FINBERT NLP ★</text>
+    <text x="341" y="65"  text-anchor="middle" fill="#666" font-size="8">Batch 32 articles</text>
+    <text x="341" y="77"  text-anchor="middle" fill="#666" font-size="8">pos / neg / neu + compound</text>
+    <text x="341" y="89"  text-anchor="middle" fill="#555" font-size="8">GPU auto-detect</text>
+    <text x="341" y="101" text-anchor="middle" fill="#22c55e" font-size="8">87% accuracy</text>
+
+    <line x1="406" y1="67" x2="429" y2="67" stroke="rgba(34,197,94,0.5)" stroke-width="1.5" marker-end="url(#pa)"/>
+
+    <rect x="429" y="35" width="110" height="65" rx="10" fill="#1a1a1a" stroke="rgba(59,130,246,0.25)" stroke-width="1.5"/>
+    <text x="484" y="58"  text-anchor="middle" fill="#60a5fa" font-size="9" font-weight="700">AGGREGATE</text>
+    <text x="484" y="72"  text-anchor="middle" fill="#666" font-size="8">Exp. decay weighting</text>
+    <text x="484" y="84"  text-anchor="middle" fill="#666" font-size="8">Velocity compute</text>
+
+    <line x1="539" y1="67" x2="562" y2="67" stroke="rgba(34,197,94,0.5)" stroke-width="1.5" marker-end="url(#pa)"/>
+
+    <rect x="562" y="35" width="115" height="65" rx="10" fill="#1a1a1a" stroke="rgba(234,179,8,0.25)" stroke-width="1.5"/>
+    <text x="619" y="58"  text-anchor="middle" fill="#fbbf24" font-size="9" font-weight="700">SCORE + CLASSIFY</text>
+    <text x="619" y="72"  text-anchor="middle" fill="#666" font-size="8">Hype (0–100)</text>
+    <text x="619" y="84"  text-anchor="middle" fill="#666" font-size="8">Pattern (6 types)</text>
+
+    <line x1="677" y1="67" x2="700" y2="67" stroke="rgba(34,197,94,0.5)" stroke-width="1.5" marker-end="url(#pa)"/>
+
+    <rect x="700" y="35" width="115" height="65" rx="10" fill="#1a1a1a" stroke="rgba(34,197,94,0.25)" stroke-width="1.5"/>
+    <text x="757" y="58"  text-anchor="middle" fill="#22c55e" font-size="9" font-weight="700">CACHE + SERVE</text>
+    <text x="757" y="72"  text-anchor="middle" fill="#666" font-size="8">Redis 15 min TTL</text>
+    <text x="757" y="84"  text-anchor="middle" fill="#666" font-size="8">&lt;100ms response</text>
+  </svg>
+  <div class="g3">
+    <div class="c" style="padding:0.65rem">
+      <h3 style="font-size:0.75rem">Background (Celery)</h3>
+      <p style="font-size:0.68rem;margin:0">Scrapes every 30 min. One task per stock, runs in parallel. Articles scored immediately by FinBERT on arrival.</p>
+    </div>
+    <div class="c" style="padding:0.65rem">
+      <h3 style="font-size:0.75rem">On-demand (per request)</h3>
+      <p style="font-size:0.68rem;margin:0">Check Redis first. Cache miss → run full pipeline (~2–5s first time). Cache hit → instant (&lt;100ms).</p>
+    </div>
+    <div class="c" style="padding:0.65rem">
+      <h3 style="font-size:0.75rem">4 Data Sources</h3>
+      <p style="font-size:0.68rem;margin:0">RSS unlimited · GNews 100/day · Reddit PRAW · Twelve Data for prices.</p>
+    </div>
+  </div>
+</section>
+
+
+<!-- ⑥ FINBERT -->
+<section>
+<aside class="notes">
+"FinBERT is BERT — Google's transformer model — but fine-tuned on over 100,000 financial documents. Reuters news, earnings call transcripts, analyst reports. The difference matters: VADER is a rule-based word dictionary, it counts positive and negative words with no context. FinBERT reads the whole sentence bidirectionally, so it understands that 'beat estimates but cut guidance' is bullish, not negative.
+
+It outputs three probabilities per article — positive, negative, neutral — and a compound score from -1 to +1. We then apply exponential decay so today's articles count more than last week's. Half-life is 3 days. 87% accuracy on the standard financial benchmark vs VADER's 65%."
+</aside>
+  <h2>FinBERT — Financial NLP</h2>
+  <div class="g2" style="gap:1rem">
+    <div>
+      <div class="cr" style="margin-bottom:0.75rem">
+        <h3 style="color:#f87171">❌ VADER (general NLP)</h3>
+        <p style="font-style:italic;color:#777;font-size:0.8rem">"Beat estimates but cut guidance"</p>
+        <p style="font-size:0.75rem">Reads "cut" as negative → calls it <span class="r">NEGATIVE</span></p>
+        <p style="font-size:0.68rem;color:#555;margin:0">Rule-based word dictionary. No context. ~65% accuracy.</p>
+      </div>
+      <div class="cg">
+        <h3>✅ FinBERT (financial BERT)</h3>
+        <p style="font-style:italic;color:#777;font-size:0.8rem">Same sentence</p>
+        <p style="font-size:0.75rem">Understands earnings context → calls it <span class="g">POSITIVE</span></p>
+        <p style="font-size:0.68rem;color:#555;margin:0">Fine-tuned on Reuters, earnings calls, Financial PhraseBank. <span class="g">87% accuracy.</span></p>
+      </div>
+    </div>
+    <div>
+      <div class="c" style="margin-bottom:0.75rem">
+        <h3>Output per article</h3>
+        <div style="margin:0.4rem 0">
+          <div style="display:flex;justify-content:space-between;font-size:0.65rem;color:#888;margin-bottom:2px"><span>Positive</span><span class="g">0.82</span></div>
+          <div style="height:5px;background:rgba(255,255,255,0.05);border-radius:4px"><div style="width:82%;height:100%;background:var(--g);border-radius:4px"></div></div>
+        </div>
+        <div style="margin:0.4rem 0">
+          <div style="display:flex;justify-content:space-between;font-size:0.65rem;color:#888;margin-bottom:2px"><span>Negative</span><span class="r">0.10</span></div>
+          <div style="height:5px;background:rgba(255,255,255,0.05);border-radius:4px"><div style="width:10%;height:100%;background:var(--r);border-radius:4px"></div></div>
+        </div>
+        <p style="font-size:0.68rem;margin-top:0.5rem">Compound: <span class="g">+0.72</span> · Label: <span class="g">Positive</span></p>
+      </div>
+      <div class="c">
+        <h3>Exponential decay weighting</h3>
+        <div class="f">weight = e^(−λ × age_days)
+λ = ln(2)/3  ← half-life 3 days</div>
+        <p style="font-size:0.65rem;margin-top:0.4rem;color:#666">Today = full weight · 3 days ago = half · 6 days ago = quarter</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ⑦ HYPE SCORE -->
+<section>
+<aside class="notes">
+"The Hype Score is our most original contribution — a 3-factor model, 0 to 100.
+
+Factor 1: Sentiment Imbalance — up to 40 points. If 90% of articles are bullish, that's suspicious. Healthy stocks have mixed, balanced coverage.
+
+Factor 2: Velocity — up to 35 points. Fast-moving attention is itself a hype signal. Even accurate positive coverage can be hype if it's accelerating too fast.
+
+Factor 3: Source Concentration — up to 25 points. 20 articles from 2 websites isn't independent confirmation, it's the same story re-syndicated. We penalize that.
+
+Add them up: under 20 is Low, 20–45 Moderate, 45–70 High, above 70 is Extreme. GameStop in January 2021 would have hit Extreme on all three factors."
+</aside>
+  <h2>Hype Score — 3 Factors, 0 to 100</h2>
+  <div class="g3" style="margin-bottom:0.7rem">
+    <div class="c" style="border-top:3px solid var(--r)">
+      <h3 style="color:#f87171">Factor 1 · Imbalance</h3>
+      <p style="font-size:0.72rem;margin-bottom:0.3rem">Up to <span class="r">40 points</span></p>
+      <p style="font-size:0.7rem">90% bullish coverage is suspicious. Healthy stocks have balanced reporting.</p>
+      <div class="f">(dominant_ratio − 0.5) × 2 × 40</div>
+    </div>
+    <div class="c" style="border-top:3px solid var(--p)">
+      <h3 style="color:#c084fc">Factor 2 · Velocity</h3>
+      <p style="font-size:0.72rem;margin-bottom:0.3rem">Up to <span class="p">35 points</span></p>
+      <p style="font-size:0.7rem">Fast-moving attention is itself a hype signal, independent of content.</p>
+      <div class="f">min(velocity / 100, 1.0) × 35</div>
+    </div>
+    <div class="c" style="border-top:3px solid var(--b)">
+      <h3 style="color:#60a5fa">Factor 3 · Concentration</h3>
+      <p style="font-size:0.72rem;margin-bottom:0.3rem">Up to <span class="b">25 points</span></p>
+      <p style="font-size:0.7rem">20 articles from 2 sites ≠ 20 independent signals. That's syndication.</p>
+      <div class="f">max(0, 1 − sources/total) × 25</div>
+    </div>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:0.6rem">
+    <div class="c" style="text-align:center;padding:0.6rem">
+      <p style="font-size:0.9rem;font-weight:900;color:var(--g);margin:0">🟢 Low</p>
+      <p style="font-size:0.65rem;color:#555;margin:0">Score &lt; 20</p>
+    </div>
+    <div class="c" style="text-align:center;padding:0.6rem">
+      <p style="font-size:0.9rem;font-weight:900;color:#60a5fa;margin:0">🔵 Moderate</p>
+      <p style="font-size:0.65rem;color:#555;margin:0">20 – 45</p>
+    </div>
+    <div class="c" style="text-align:center;padding:0.6rem">
+      <p style="font-size:0.9rem;font-weight:900;color:var(--y);margin:0">🟡 High</p>
+      <p style="font-size:0.65rem;color:#555;margin:0">45 – 70</p>
+    </div>
+    <div class="c" style="text-align:center;padding:0.6rem">
+      <p style="font-size:0.9rem;font-weight:900;color:var(--r);margin:0">🔴 Extreme</p>
+      <p style="font-size:0.65rem;color:#555;margin:0">Score &gt; 70</p>
+    </div>
+  </div>
+</section>
+
+
+<!-- ⑧ PATTERN CLASSIFIER -->
+<section>
+<aside class="notes">
+"On top of the hype score, we classify every stock's narrative into one of 6 archetypes. We chose rule-based over machine learning on purpose — we wanted full explainability. Users can see exactly which conditions triggered the label, no black box.
+
+Short Squeeze Dynamics is the most extreme — that's your GameStop setup. Macro Fear is broad negative coverage around systemic events. Theme/Sector Wave is an overheated sector rotation. Narrative Cool-off is a story that's fading. Pre-Catalyst Build is quiet anticipation before an earnings or product launch. Balanced Coverage is the healthy baseline.
+
+Point out: we check in priority order, most extreme first, fallback to Balanced Coverage if nothing fires."
+</aside>
+  <h2>6 Narrative Archetypes — Explainable, Rule-Based</h2>
+  <div class="g2" style="gap:0.6rem;margin-top:0.5rem">
+    <div class="c" style="border-left:3px solid var(--r);padding:0.65rem 0.9rem">
+      <p style="margin:0;font-size:0.78rem"><span class="r">🔥 Short Squeeze Dynamics</span> <span class="pill pr">Extreme</span></p>
+      <p style="font-size:0.65rem;color:#666;margin:0.2rem 0 0">Extreme bullish + accelerating velocity + 75%+ imbalance + hype &gt;65. GME/AMC pattern.</p>
+    </div>
+    <div class="c" style="border-left:3px solid #f97316;padding:0.65rem 0.9rem">
+      <p style="margin:0;font-size:0.78rem"><span class="y">😨 Macro Fear</span> <span class="pill pr">High</span></p>
+      <p style="font-size:0.65rem;color:#666;margin:0.2rem 0 0">Sustained negative + broad multi-source coverage + hype &gt;45. Fed, regulation, market anxiety.</p>
+    </div>
+    <div class="c" style="border-left:3px solid var(--y);padding:0.65rem 0.9rem">
+      <p style="margin:0;font-size:0.78rem"><span class="y">🌊 Theme/Sector Wave</span> <span class="pill py">High</span></p>
+      <p style="font-size:0.65rem;color:#666;margin:0.2rem 0 0">Positive + accelerating + diverse sources + hype &gt;40. AI boom, clean energy cycles.</p>
+    </div>
+    <div class="c" style="border-left:3px solid var(--b);padding:0.65rem 0.9rem">
+      <p style="margin:0;font-size:0.78rem"><span class="b">📉 Narrative Cool-off</span> <span class="pill pb">Moderate</span></p>
+      <p style="font-size:0.65rem;color:#666;margin:0.2rem 0 0">Velocity decelerating + was high hype + coverage thinning. Story fading, attention moving on.</p>
+    </div>
+    <div class="c" style="border-left:3px solid var(--p);padding:0.65rem 0.9rem">
+      <p style="margin:0;font-size:0.78rem"><span class="p">⏳ Pre-Catalyst Build</span> <span class="pill pp">Moderate</span></p>
+      <p style="font-size:0.65rem;color:#666;margin:0.2rem 0 0">Mentions accelerating + neutral tone. Earnings/FDA/product launch anticipation.</p>
+    </div>
+    <div class="c" style="border-left:3px solid var(--g);padding:0.65rem 0.9rem">
+      <p style="margin:0;font-size:0.78rem"><span class="g">✅ Balanced Coverage</span> <span class="pill pg">Low</span></p>
+      <p style="font-size:0.65rem;color:#666;margin:0.2rem 0 0">No unusual signals. Diversified sources. Routine, healthy information flow.</p>
+    </div>
+  </div>
+  <div class="div"></div>
+  <p style="font-size:0.68rem;color:#555">Rule-based (not ML) → <span class="g">fully explainable</span>. Users see exactly which conditions triggered the label.</p>
+</section>
+
+
+<!-- ⑨ TECH STACK -->
+<section>
+<aside class="notes">
+"Frontend is React 19 with TypeScript, built by Vite. Tailwind CSS for the dark theme, Recharts for all the charts, React Router for navigation, Context API for auth and gamification state.
+
+Backend is Django 4.2 with Django REST Framework — over 20 endpoints. Celery and Redis for background scraping and caching. SimpleJWT for authentication. FinBERT via HuggingFace for NLP. scikit-learn and XGBoost for the experimental ML classifier. Fernet encryption for storing user API keys. Gemini and Groq as our LLM providers.
+
+Database is SQLite locally, PostgreSQL in production. 8 models total."
+</aside>
+  <h2>Tech Stack</h2>
+  <div class="g2" style="gap:1rem;margin-top:0.5rem">
+    <div>
+      <h3 style="color:#60a5fa;margin-bottom:0.5rem">🖥️ Frontend</h3>
+      <div class="c">
+        <ul>
+          <li><b>React 19 + TypeScript</b> — component UI</li>
+          <li><b>Vite</b> — dev server, fast HMR</li>
+          <li><b>Tailwind CSS v4</b> — dark theme, custom tokens</li>
+          <li><b>Recharts</b> — price chart + 91-day timeline</li>
+          <li><b>React Router v6</b> — client-side navigation</li>
+          <li><b>Context API</b> — Auth + Gamification state</li>
+          <li>15 components · 7 services · 6 pages</li>
+        </ul>
+      </div>
+    </div>
+    <div>
+      <h3 style="margin-bottom:0.5rem">⚙️ Backend</h3>
+      <div class="c">
+        <ul>
+          <li><b>Django 4.2 + DRF</b> — 20+ REST endpoints</li>
+          <li><b>Celery 5 + Redis</b> — background scraping + cache</li>
+          <li><b>SimpleJWT</b> — access + refresh tokens</li>
+          <li><b>FinBERT</b> (HuggingFace) — financial NLP</li>
+          <li><b>scikit-learn + XGBoost</b> — ML classifier</li>
+          <li><b>Fernet encryption</b> — API key storage</li>
+          <li><b>Gemini / Groq</b> — LLM summaries + chat</li>
+          <li>8 DB models · SQLite (dev) / PostgreSQL (prod)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ⑩ BY THE NUMBERS -->
+<section>
+<aside class="notes">
+"Quick snapshot of what we actually built. 20+ REST API endpoints. FinBERT hitting 87% accuracy on the financial benchmark. 8 database models. 6 narrative archetypes. 91-day timeline. 4 scrapers pulling from different sources. Celery scraping every 30 minutes. Roughly 6,000 lines of code across frontend and backend combined."
+</aside>
+  <h2>By the Numbers</h2>
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:0.75rem;margin-top:0.7rem">
+    <div class="c" style="text-align:center;padding:1.1rem 0.5rem"><div class="stat">20+</div><div class="stat-s">REST endpoints</div></div>
+    <div class="c" style="text-align:center;padding:1.1rem 0.5rem"><div class="stat">87%</div><div class="stat-s">FinBERT accuracy</div></div>
+    <div class="c" style="text-align:center;padding:1.1rem 0.5rem"><div class="stat">8</div><div class="stat-s">database models</div></div>
+    <div class="c" style="text-align:center;padding:1.1rem 0.5rem"><div class="stat">6</div><div class="stat-s">narrative archetypes</div></div>
+    <div class="c" style="text-align:center;padding:1.1rem 0.5rem"><div class="stat">91</div><div class="stat-s">day timeline</div></div>
+    <div class="c" style="text-align:center;padding:1.1rem 0.5rem"><div class="stat">4</div><div class="stat-s">data scrapers</div></div>
+    <div class="c" style="text-align:center;padding:1.1rem 0.5rem"><div class="stat">30m</div><div class="stat-s">scrape interval</div></div>
+    <div class="c" style="text-align:center;padding:1.1rem 0.5rem"><div class="stat">6k</div><div class="stat-s">lines of code</div></div>
+  </div>
+</section>
+
+
+<!-- ⑪ CLOSING -->
+<section style="text-align:center">
+<aside class="notes">
+"To wrap up — MarketNoise gives retail investors what they've never had: a clear, transparent answer to 'is this attention real or manufactured?' We built it with React, Django, FinBERT, and Celery. No black-box predictions, no fake buy signals. Just honest narrative intelligence. Happy to take any questions."
+</aside>
+  <div style="width:64px;height:64px;background:rgba(5,46,22,0.8);border:1px solid rgba(34,197,94,0.4);border-radius:16px;display:flex;align-items:center;justify-content:center;margin:0 auto 1rem;box-shadow:0 0 40px rgba(34,197,94,0.2)">
+    <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2.2" stroke-linecap="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+  </div>
+  <h2 style="font-size:1.7rem;margin-bottom:0.3rem">
+    <span style="background:linear-gradient(135deg,#4ade80,#22c55e,#16a34a);-webkit-background-clip:text;-webkit-text-fill-color:transparent">MarketNoise</span>
+  </h2>
+  <p style="color:#777;font-size:0.9rem;margin-bottom:1.4rem">Narrative Intelligence for Retail Investors</p>
+  <div class="cg" style="max-width:580px;margin:0 auto 1.4rem;text-align:left">
+    <p style="font-size:0.88rem;margin:0;line-height:1.8;color:#ddd">
+      Retail investors deserve to know whether the attention around a stock is
+      <span class="w">real or manufactured</span>. We built a full-stack platform —
+      React, Django, FinBERT, Celery — that quantifies it with
+      <span class="w">transparent, explainable scores</span>.
+      Not a black box. Not a price prediction. Just honest narrative intelligence.
+    </p>
+  </div>
+  <div style="display:flex;justify-content:center;flex-wrap:wrap;gap:0.5rem">
+    <span class="pill pg">FinBERT NLP</span>
+    <span class="pill pb">React + TypeScript</span>
+    <span class="pill pp">Django + Celery</span>
+    <span class="pill py">Redis Cache</span>
+    <span class="pill pr">Hype Detection</span>
+  </div>
+</section>
+
+
+</div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.js"></script>
+<script>
+Reveal.initialize({
+  hash:true, slideNumber:'c/t',
+  transition:'fade', transitionSpeed:'fast',
+  backgroundTransition:'none',
+  controls:true, progress:true,
+  center:false,
+  width:1280, height:720, margin:0.04
+});
+</script>
+</body>
+</html>

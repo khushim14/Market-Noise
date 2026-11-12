@@ -1,0 +1,1419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>MarketNoise — Presentation</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reset.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/theme/black.css" />
+<style>
+  :root {
+    --green: #22c55e;
+    --green-dim: rgba(34,197,94,0.15);
+    --green-border: rgba(34,197,94,0.3);
+    --surface: #111;
+    --surface2: #1a1a1a;
+    --text-muted: #888;
+    --danger: #ef4444;
+    --yellow: #eab308;
+    --purple: #a855f7;
+    --blue: #3b82f6;
+  }
+
+  .reveal {
+    font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+    color: #e5e5e5;
+    background: #0a0a0a;
+  }
+
+  .reveal .slides section {
+    padding: 0 2rem;
+  }
+
+  /* ── Typography ── */
+  .reveal h1, .reveal h2, .reveal h3, .reveal h4 {
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    text-transform: none;
+    color: #fff;
+  }
+
+  .reveal h1 { font-size: 3rem; }
+  .reveal h2 { font-size: 2rem; margin-bottom: 0.75rem; }
+  .reveal h3 { font-size: 1.3rem; color: var(--green); }
+
+  .reveal p, .reveal li { font-size: 0.85rem; line-height: 1.7; color: #ccc; }
+  .reveal ul { list-style: none; padding: 0; }
+  .reveal ul li::before { content: "›"; color: var(--green); margin-right: 0.5rem; font-weight: 700; }
+
+  /* ── Accent helpers ── */
+  .green  { color: var(--green); }
+  .muted  { color: var(--text-muted); }
+  .danger { color: var(--danger); }
+  .yellow { color: var(--yellow); }
+  .purple { color: var(--purple); }
+  .blue   { color: var(--blue); }
+
+  /* ── Cards ── */
+  .card {
+    background: var(--surface2);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 14px;
+    padding: 1.1rem 1.3rem;
+  }
+
+  .card-green {
+    background: rgba(34,197,94,0.05);
+    border: 1px solid var(--green-border);
+    border-radius: 14px;
+    padding: 1rem 1.2rem;
+  }
+
+  /* ── Grid helpers ── */
+  .cols-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .cols-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.8rem; }
+  .cols-4 { display: grid; grid-template-columns: repeat(4,1fr); gap: 0.7rem; }
+
+  /* ── Pill / badge ── */
+  .pill {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: rgba(34,197,94,0.08);
+    border: 1px solid rgba(34,197,94,0.2);
+    border-radius: 999px;
+    padding: 3px 12px;
+    font-size: 0.72rem;
+    color: var(--green);
+    font-weight: 600;
+  }
+
+  .pill-blue  { background: rgba(59,130,246,0.08); border-color: rgba(59,130,246,0.25); color: #60a5fa; }
+  .pill-purple{ background: rgba(168,85,247,0.08); border-color: rgba(168,85,247,0.25); color: #c084fc; }
+  .pill-yellow{ background: rgba(234,179,8,0.08);  border-color: rgba(234,179,8,0.25);  color: #fbbf24; }
+  .pill-red   { background: rgba(239,68,68,0.08);  border-color: rgba(239,68,68,0.25);  color: #f87171; }
+
+  /* ── Score bar ── */
+  .score-row { margin-bottom: 0.5rem; }
+  .score-label { font-size: 0.7rem; color: #aaa; margin-bottom: 3px; display: flex; justify-content: space-between; }
+  .score-track { height: 6px; background: rgba(255,255,255,0.06); border-radius: 4px; overflow: hidden; }
+  .score-fill  { height: 100%; border-radius: 4px; }
+
+  /* ── Title slide ── */
+  .title-logo {
+    width: 72px; height: 72px;
+    background: rgba(5,46,22,0.8);
+    border: 1px solid rgba(34,197,94,0.4);
+    border-radius: 18px;
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 1.2rem;
+    box-shadow: 0 0 40px rgba(34,197,94,0.2);
+  }
+
+  /* ── Dividers ── */
+  .divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(34,197,94,0.3), transparent);
+    margin: 0.75rem 0;
+  }
+
+  /* ── Section label ── */
+  .section-label {
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--green);
+    margin-bottom: 0.4rem;
+  }
+
+  /* ── Table ── */
+  .reveal table { font-size: 0.72rem; border-collapse: collapse; width: 100%; }
+  .reveal table th {
+    color: var(--green); font-weight: 700; text-transform: uppercase;
+    font-size: 0.62rem; letter-spacing: 0.08em;
+    padding: 0.4rem 0.6rem; border-bottom: 1px solid rgba(34,197,94,0.2);
+  }
+  .reveal table td { padding: 0.4rem 0.6rem; color: #ccc; border-bottom: 1px solid rgba(255,255,255,0.04); }
+  .reveal table tr:last-child td { border-bottom: none; }
+
+  /* ── Stat number ── */
+  .stat-num { font-size: 2.2rem; font-weight: 900; color: var(--green); line-height: 1; }
+  .stat-label { font-size: 0.65rem; color: #666; margin-top: 2px; }
+
+  /* ── Flow arrow ── */
+  .arrow { color: var(--green); font-size: 1.2rem; display: flex; align-items: center; justify-content: center; }
+
+  /* ── Code block ── */
+  .code-block {
+    background: #0d1117;
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 10px;
+    padding: 0.8rem 1rem;
+    font-family: 'Fira Code', 'Consolas', monospace;
+    font-size: 0.68rem;
+    color: #7ee787;
+    text-align: left;
+    line-height: 1.7;
+  }
+
+  /* ── Highlight box ── */
+  .highlight-box {
+    background: linear-gradient(135deg, rgba(34,197,94,0.08), rgba(34,197,94,0.02));
+    border: 1px solid rgba(34,197,94,0.2);
+    border-radius: 14px;
+    padding: 1rem 1.3rem;
+  }
+
+  /* ── Reveal overrides ── */
+  .reveal .progress { color: var(--green); }
+  .reveal .controls { color: var(--green); }
+  .reveal .slide-number { color: #555; font-size: 0.7rem; }
+</style>
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+
+<!-- ─────────────────────────────────────────────────────────────
+     SLIDE 1: TITLE
+───────────────────────────────────────────────────────────────── -->
+<section>
+  <div class="title-logo">
+    <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/>
+      <line x1="6" y1="20" x2="6" y2="14"/>
+    </svg>
+  </div>
+  <h1>
+    <span style="background:linear-gradient(135deg,#4ade80,#22c55e,#16a34a);-webkit-background-clip:text;-webkit-text-fill-color:transparent">
+      MarketNoise
+    </span>
+  </h1>
+  <p style="font-size:1.1rem;color:#aaa;margin-bottom:1.2rem">Narrative Intelligence for Retail Investors</p>
+  <div class="divider"></div>
+  <div style="display:flex;justify-content:center;gap:0.6rem;margin-top:0.9rem;flex-wrap:wrap">
+    <span class="pill">FinBERT NLP</span>
+    <span class="pill pill-blue">React + Django</span>
+    <span class="pill pill-purple">Celery Pipeline</span>
+    <span class="pill pill-yellow">AI Chat</span>
+    <span class="pill pill-red">Hype Detection</span>
+  </div>
+  <p style="margin-top:1.4rem;font-size:0.7rem;color:#444">USC — Spring 2026 &nbsp;·&nbsp; Team Project</p>
+</section>
+
+<!-- ─────────────────────────────────────────────────────────────
+     SLIDE 2: THE PROBLEM
+───────────────────────────────────────────────────────────────── -->
+<section>
+  <p class="section-label">The Problem</p>
+  <h2>Retail investors are flying blind</h2>
+
+  <!-- Hook scenario -->
+  <div style="margin:0.7rem 0 0.9rem;padding:0.9rem 1.2rem;background:rgba(239,68,68,0.05);border:1px solid rgba(239,68,68,0.2);border-radius:12px;text-align:center">
+    <p style="font-size:0.95rem;color:#fff;margin:0">
+      You see <span class="green">NVDA +18%</span> trending on Reddit. 200 articles in 24 hours. Is this real news — or just hype?
+      <span class="danger"> You have no way to tell.</span>
+    </p>
+  </div>
+
+  <div class="cols-2">
+    <div>
+      <div class="card" style="margin-bottom:0.7rem;border-left:3px solid #ef4444">
+        <div style="display:flex;align-items:center;gap:0.6rem;margin-bottom:0.3rem">
+          <span style="font-size:1.3rem">📰</span>
+          <h3 style="color:#f87171;font-size:0.82rem;margin:0">Information Overload</h3>
+        </div>
+        <p style="font-size:0.7rem;margin:0">Hundreds of articles per stock per day — credible reporting mixed with social frenzy. No way to separate signal from noise.</p>
+      </div>
+      <div class="card" style="border-left:3px solid #eab308">
+        <div style="display:flex;align-items:center;gap:0.6rem;margin-bottom:0.3rem">
+          <span style="font-size:1.3rem">🎢</span>
+          <h3 style="color:#fbbf24;font-size:0.82rem;margin:0">Hype vs. Reality</h3>
+        </div>
+        <p style="font-size:0.7rem;margin:0">Stocks surge on narrative cycles, not just fundamentals. Retail investors buy the hype peak — and sell the crash bottom.</p>
+      </div>
+    </div>
+    <div>
+      <div class="card" style="margin-bottom:0.7rem;border-left:3px solid #a855f7">
+        <div style="display:flex;align-items:center;gap:0.6rem;margin-bottom:0.3rem">
+          <span style="font-size:1.3rem">🧠</span>
+          <h3 style="color:#c084fc;font-size:0.82rem;margin:0">NLP Gets Finance Wrong</h3>
+        </div>
+        <p style="font-size:0.7rem;margin:0">"Beat estimates but cut guidance" — VADER calls this <span class="danger">negative</span>. It's actually <span class="green">bullish</span>. General tools miss financial context entirely.</p>
+      </div>
+      <div class="card" style="border-left:3px solid #3b82f6">
+        <div style="display:flex;align-items:center;gap:0.6rem;margin-bottom:0.3rem">
+          <span style="font-size:1.3rem">⏱️</span>
+          <h3 style="color:#60a5fa;font-size:0.82rem;margin:0">No Story Over Time</h3>
+        </div>
+        <p style="font-size:0.7rem;margin:0">Every tool shows today's sentiment. Nobody shows you <em>how the narrative evolved</em> or exactly when it shifted direction.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─────────────────────────────────────────────────────────────
+     SLIDE 3: THE SOLUTION
+───────────────────────────────────────────────────────────────── -->
+<section>
+  <p class="section-label">Our Solution</p>
+  <h2>MarketNoise — each problem, solved</h2>
+
+  <!-- Problem → Solution mapping table -->
+  <div style="margin-top:0.8rem">
+    <div style="display:grid;grid-template-columns:1fr 40px 1fr;gap:0.5rem 0;align-items:center">
+
+      <!-- Row 1 -->
+      <div class="card" style="padding:0.65rem 0.9rem;border-left:3px solid #ef4444">
+        <p style="margin:0;font-size:0.72rem;color:#f87171">❌ Too much noise — can't tell signal from hype</p>
+      </div>
+      <div style="text-align:center;color:#22c55e;font-size:1.1rem;font-weight:900">→</div>
+      <div class="card-green" style="padding:0.65rem 0.9rem">
+        <p style="margin:0;font-size:0.72rem;color:#4ade80">✅ Hype Score (0–100) + 3-factor breakdown shows exactly what's manufactured</p>
+      </div>
+
+      <!-- Row 2 -->
+      <div class="card" style="padding:0.65rem 0.9rem;border-left:3px solid #eab308;margin-top:0.45rem">
+        <p style="margin:0;font-size:0.72rem;color:#fbbf24">❌ Retail investors buy hype peaks, sell crash bottoms</p>
+      </div>
+      <div style="text-align:center;color:#22c55e;font-size:1.1rem;font-weight:900;margin-top:0.45rem">→</div>
+      <div class="card-green" style="padding:0.65rem 0.9rem;margin-top:0.45rem">
+        <p style="margin:0;font-size:0.72rem;color:#4ade80">✅ Narrative Velocity flags attention spikes before they peak — pattern classifier warns of Short Squeeze setups</p>
+      </div>
+
+      <!-- Row 3 -->
+      <div class="card" style="padding:0.65rem 0.9rem;border-left:3px solid #a855f7;margin-top:0.45rem">
+        <p style="margin:0;font-size:0.72rem;color:#c084fc">❌ General NLP misreads financial language</p>
+      </div>
+      <div style="text-align:center;color:#22c55e;font-size:1.1rem;font-weight:900;margin-top:0.45rem">→</div>
+      <div class="card-green" style="padding:0.65rem 0.9rem;margin-top:0.45rem">
+        <p style="margin:0;font-size:0.72rem;color:#4ade80">✅ FinBERT — trained on 100k+ financial docs (Reuters, earnings calls) — understands guidance cuts, beats, sector risk</p>
+      </div>
+
+      <!-- Row 4 -->
+      <div class="card" style="padding:0.65rem 0.9rem;border-left:3px solid #3b82f6;margin-top:0.45rem">
+        <p style="margin:0;font-size:0.72rem;color:#60a5fa">❌ No view of how narrative evolved over time</p>
+      </div>
+      <div style="text-align:center;color:#22c55e;font-size:1.1rem;font-weight:900;margin-top:0.45rem">→</div>
+      <div class="card-green" style="padding:0.65rem 0.9rem;margin-top:0.45rem">
+        <p style="margin:0;font-size:0.72rem;color:#4ade80">✅ 91-day Narrative Timeline with shift detection — see exactly when the story turned bullish or bearish</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ─────────────────────────────────────────────────────────────
+     SLIDE 3B: CUSTOMER JOURNEY
+───────────────────────────────────────────────────────────────── -->
+<section>
+  <p class="section-label">Customer Journey</p>
+  <h2>How a user goes from confused → informed</h2>
+
+  <div style="margin-top:0.9rem">
+    <svg viewBox="0 0 820 200" style="width:100%" xmlns="http://www.w3.org/2000/svg" font-family="Inter,sans-serif">
+      <defs>
+        <marker id="cja" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto">
+          <path d="M0,0 L0,7 L7,3.5 z" fill="rgba(34,197,94,0.8)"/>
+        </marker>
+      </defs>
+
+      <!-- Step 1: Landing -->
+      <rect x="10" y="55" width="120" height="90" rx="12" fill="rgba(34,197,94,0.06)" stroke="rgba(34,197,94,0.3)" stroke-width="1.5"/>
+      <text x="70" y="78" text-anchor="middle" fill="#22c55e" font-size="18">🏠</text>
+      <text x="70" y="97" text-anchor="middle" fill="#fff" font-size="9" font-weight="700">Homepage</text>
+      <text x="70" y="111" text-anchor="middle" fill="#777" font-size="8">Search bar</text>
+      <text x="70" y="123" text-anchor="middle" fill="#777" font-size="8">Live feed</text>
+      <text x="70" y="135" text-anchor="middle" fill="#777" font-size="8">Daily challenge</text>
+      <circle cx="70" cy="165" r="11" fill="rgba(34,197,94,0.15)" stroke="rgba(34,197,94,0.4)" stroke-width="1"/>
+      <text x="70" y="169" text-anchor="middle" fill="#22c55e" font-size="9" font-weight="700">1</text>
+
+      <line x1="130" y1="100" x2="158" y2="100" stroke="rgba(34,197,94,0.5)" stroke-width="1.5" marker-end="url(#cja)"/>
+      <text x="144" y="93" text-anchor="middle" fill="#555" font-size="8">search</text>
+
+      <!-- Step 2: Stock Page -->
+      <rect x="158" y="40" width="135" height="120" rx="12" fill="rgba(34,197,94,0.06)" stroke="rgba(34,197,94,0.35)" stroke-width="2"/>
+      <text x="225" y="62" text-anchor="middle" fill="#22c55e" font-size="18">📈</text>
+      <text x="225" y="81" text-anchor="middle" fill="#fff" font-size="9" font-weight="700">Stock Page</text>
+      <text x="225" y="96" text-anchor="middle" fill="#777" font-size="8">Live price + chart</text>
+      <text x="225" y="108" text-anchor="middle" fill="#777" font-size="8">Sentiment score</text>
+      <text x="225" y="120" text-anchor="middle" fill="#777" font-size="8">Velocity + Hype</text>
+      <text x="225" y="132" text-anchor="middle" fill="#777" font-size="8">Pattern archetype</text>
+      <text x="225" y="144" text-anchor="middle" fill="#777" font-size="8">Narrative Summary</text>
+      <circle cx="225" cy="175" r="11" fill="rgba(34,197,94,0.15)" stroke="rgba(34,197,94,0.4)" stroke-width="1"/>
+      <text x="225" y="179" text-anchor="middle" fill="#22c55e" font-size="9" font-weight="700">2</text>
+
+      <line x1="293" y1="100" x2="321" y2="100" stroke="rgba(34,197,94,0.5)" stroke-width="1.5" marker-end="url(#cja)"/>
+      <text x="307" y="93" text-anchor="middle" fill="#555" font-size="8">scroll</text>
+
+      <!-- Step 3: Deep analysis -->
+      <rect x="321" y="50" width="130" height="110" rx="12" fill="rgba(168,85,247,0.05)" stroke="rgba(168,85,247,0.25)" stroke-width="1.5"/>
+      <text x="386" y="72" text-anchor="middle" fill="#c084fc" font-size="18">🔬</text>
+      <text x="386" y="91" text-anchor="middle" fill="#fff" font-size="9" font-weight="700">Deep Analysis</text>
+      <text x="386" y="106" text-anchor="middle" fill="#777" font-size="8">Narrative Timeline</text>
+      <text x="386" y="118" text-anchor="middle" fill="#777" font-size="8">91-day drift chart</text>
+      <text x="386" y="130" text-anchor="middle" fill="#777" font-size="8">Shift detection</text>
+      <text x="386" y="142" text-anchor="middle" fill="#777" font-size="8">News articles</text>
+      <circle cx="386" cy="175" r="11" fill="rgba(168,85,247,0.12)" stroke="rgba(168,85,247,0.35)" stroke-width="1"/>
+      <text x="386" y="179" text-anchor="middle" fill="#c084fc" font-size="9" font-weight="700">3</text>
+
+      <line x1="451" y1="100" x2="479" y2="100" stroke="rgba(234,179,8,0.5)" stroke-width="1.5" marker-end="url(#cja)"/>
+      <text x="465" y="93" text-anchor="middle" fill="#555" font-size="8">ask</text>
+
+      <!-- Step 4: AI Chat -->
+      <rect x="479" y="55" width="120" height="90" rx="12" fill="rgba(234,179,8,0.05)" stroke="rgba(234,179,8,0.25)" stroke-width="1.5"/>
+      <text x="539" y="78" text-anchor="middle" fill="#fbbf24" font-size="18">💬</text>
+      <text x="539" y="97" text-anchor="middle" fill="#fff" font-size="9" font-weight="700">AI Chat</text>
+      <text x="539" y="112" text-anchor="middle" fill="#777" font-size="8">Ask anything</text>
+      <text x="539" y="124" text-anchor="middle" fill="#777" font-size="8">Context-aware</text>
+      <text x="539" y="136" text-anchor="middle" fill="#777" font-size="8">(requires login)</text>
+      <circle cx="539" cy="165" r="11" fill="rgba(234,179,8,0.1)" stroke="rgba(234,179,8,0.3)" stroke-width="1"/>
+      <text x="539" y="169" text-anchor="middle" fill="#fbbf24" font-size="9" font-weight="700">4</text>
+
+      <line x1="599" y1="100" x2="627" y2="100" stroke="rgba(59,130,246,0.5)" stroke-width="1.5" marker-end="url(#cja)"/>
+      <text x="613" y="93" text-anchor="middle" fill="#555" font-size="8">save</text>
+
+      <!-- Step 5: Watchlist -->
+      <rect x="627" y="55" width="120" height="90" rx="12" fill="rgba(59,130,246,0.05)" stroke="rgba(59,130,246,0.25)" stroke-width="1.5"/>
+      <text x="687" y="78" text-anchor="middle" fill="#60a5fa" font-size="18">⭐</text>
+      <text x="687" y="97" text-anchor="middle" fill="#fff" font-size="9" font-weight="700">Watchlist</text>
+      <text x="687" y="112" text-anchor="middle" fill="#777" font-size="8">Save tickers</text>
+      <text x="687" y="124" text-anchor="middle" fill="#777" font-size="8">Monitor signals</text>
+      <text x="687" y="136" text-anchor="middle" fill="#777" font-size="8">Live updates</text>
+      <circle cx="687" cy="165" r="11" fill="rgba(59,130,246,0.1)" stroke="rgba(59,130,246,0.3)" stroke-width="1"/>
+      <text x="687" y="169" text-anchor="middle" fill="#60a5fa" font-size="9" font-weight="700">5</text>
+
+      <!-- Outcome -->
+      <text x="780" y="97" text-anchor="middle" fill="#22c55e" font-size="11" font-weight="900">✓ Informed</text>
+      <text x="780" y="112" text-anchor="middle" fill="#555" font-size="8">Not just</text>
+      <text x="780" y="124" text-anchor="middle" fill="#555" font-size="8">price-watching</text>
+      <line x1="747" y1="100" x2="755" y2="100" stroke="rgba(34,197,94,0.3)" stroke-width="1" marker-end="url(#cja)"/>
+    </svg>
+
+    <!-- Journey callouts -->
+    <div class="cols-3" style="gap:0.6rem;margin-top:0.3rem">
+      <div class="card" style="padding:0.6rem 0.8rem;text-align:center">
+        <p style="font-size:0.68rem;margin:0;color:#aaa"><span class="green">No login needed</span> for steps 1–3.<br/>All analysis is public.</p>
+      </div>
+      <div class="card" style="padding:0.6rem 0.8rem;text-align:center">
+        <p style="font-size:0.68rem;margin:0;color:#aaa">Login unlocks <span class="yellow">Chat</span> + <span class="blue">Watchlist</span>.<br/>JWT auth, refresh tokens.</p>
+      </div>
+      <div class="card" style="padding:0.6rem 0.8rem;text-align:center">
+        <p style="font-size:0.68rem;margin:0;color:#aaa"><span class="purple">Gamification</span> rewards every step —<br/>XP, missions, badges.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─────────────────────────────────────────────────────────────
+     SLIDE 4: SYSTEM ARCHITECTURE
+───────────────────────────────────────────────────────────────── -->
+<section>
+  <p class="section-label">Architecture</p>
+  <h2>Full-Stack System Overview</h2>
+
+  <svg viewBox="0 0 820 320" style="width:100%;margin-top:0.5rem" xmlns="http://www.w3.org/2000/svg" font-family="Inter,sans-serif">
+    <!-- Background boxes -->
+    <!-- User -->
+    <rect x="10" y="120" width="100" height="80" rx="12" fill="#1a1a1a" stroke="rgba(34,197,94,0.3)" stroke-width="1.5"/>
+    <text x="60" y="152" text-anchor="middle" fill="#22c55e" font-size="11" font-weight="700">USER</text>
+    <text x="60" y="168" text-anchor="middle" fill="#888" font-size="9">Browser</text>
+    <text x="60" y="182" text-anchor="middle" fill="#888" font-size="9">React + Vite</text>
+
+    <!-- Arrow user→frontend -->
+    <line x1="110" y1="160" x2="150" y2="160" stroke="rgba(34,197,94,0.5)" stroke-width="1.5" marker-end="url(#arr)"/>
+
+    <!-- Frontend -->
+    <rect x="150" y="90" width="160" height="140" rx="12" fill="#1a1a1a" stroke="rgba(59,130,246,0.35)" stroke-width="1.5"/>
+    <text x="230" y="112" text-anchor="middle" fill="#60a5fa" font-size="10" font-weight="700">FRONTEND</text>
+    <text x="230" y="128" text-anchor="middle" fill="#555" font-size="8">React 19 · TypeScript</text>
+    <rect x="165" y="135" width="130" height="18" rx="5" fill="rgba(59,130,246,0.08)" stroke="rgba(59,130,246,0.15)" stroke-width="1"/>
+    <text x="230" y="148" text-anchor="middle" fill="#93c5fd" font-size="8">Pages + Components</text>
+    <rect x="165" y="157" width="130" height="18" rx="5" fill="rgba(59,130,246,0.08)" stroke="rgba(59,130,246,0.15)" stroke-width="1"/>
+    <text x="230" y="170" text-anchor="middle" fill="#93c5fd" font-size="8">Recharts · Tailwind CSS</text>
+    <rect x="165" y="179" width="130" height="18" rx="5" fill="rgba(59,130,246,0.08)" stroke="rgba(59,130,246,0.15)" stroke-width="1"/>
+    <text x="230" y="192" text-anchor="middle" fill="#93c5fd" font-size="8">Auth + Gamification Context</text>
+
+    <!-- Arrow frontend→backend -->
+    <line x1="310" y1="160" x2="350" y2="160" stroke="rgba(34,197,94,0.5)" stroke-width="1.5" marker-end="url(#arr)"/>
+    <text x="330" y="154" text-anchor="middle" fill="#555" font-size="8">REST</text>
+    <text x="330" y="163" text-anchor="middle" fill="#555" font-size="8">/ JWT</text>
+
+    <!-- Backend -->
+    <rect x="350" y="55" width="185" height="210" rx="12" fill="#1a1a1a" stroke="rgba(34,197,94,0.35)" stroke-width="1.5"/>
+    <text x="442" y="78" text-anchor="middle" fill="#22c55e" font-size="10" font-weight="700">BACKEND</text>
+    <text x="442" y="93" text-anchor="middle" fill="#555" font-size="8">Django 4.2 · DRF · Gunicorn</text>
+    <rect x="363" y="100" width="159" height="17" rx="5" fill="rgba(34,197,94,0.07)" stroke="rgba(34,197,94,0.15)" stroke-width="1"/>
+    <text x="442" y="112" text-anchor="middle" fill="#86efac" font-size="8">20+ REST Endpoints</text>
+    <rect x="363" y="121" width="159" height="17" rx="5" fill="rgba(34,197,94,0.07)" stroke="rgba(34,197,94,0.15)" stroke-width="1"/>
+    <text x="442" y="133" text-anchor="middle" fill="#86efac" font-size="8">FinBERT NLP Pipeline</text>
+    <rect x="363" y="142" width="159" height="17" rx="5" fill="rgba(34,197,94,0.07)" stroke="rgba(34,197,94,0.15)" stroke-width="1"/>
+    <text x="442" y="154" text-anchor="middle" fill="#86efac" font-size="8">Hype + Pattern Classifier</text>
+    <rect x="363" y="163" width="159" height="17" rx="5" fill="rgba(34,197,94,0.07)" stroke="rgba(34,197,94,0.15)" stroke-width="1"/>
+    <text x="442" y="175" text-anchor="middle" fill="#86efac" font-size="8">Drift Detection</text>
+    <rect x="363" y="184" width="159" height="17" rx="5" fill="rgba(34,197,94,0.07)" stroke="rgba(34,197,94,0.15)" stroke-width="1"/>
+    <text x="442" y="196" text-anchor="middle" fill="#86efac" font-size="8">SimpleJWT Auth</text>
+    <rect x="363" y="205" width="159" height="17" rx="5" fill="rgba(34,197,94,0.07)" stroke="rgba(34,197,94,0.15)" stroke-width="1"/>
+    <text x="442" y="217" text-anchor="middle" fill="#86efac" font-size="8">LLM (Gemini / Groq)</text>
+    <rect x="363" y="226" width="159" height="17" rx="5" fill="rgba(34,197,94,0.07)" stroke="rgba(34,197,94,0.15)" stroke-width="1"/>
+    <text x="442" y="238" text-anchor="middle" fill="#86efac" font-size="8">ML (RF + XGBoost)</text>
+
+    <!-- Arrow backend→celery -->
+    <line x1="442" y1="265" x2="442" y2="290" stroke="rgba(168,85,247,0.5)" stroke-width="1.5" marker-end="url(#arr-purple)"/>
+
+    <!-- Celery -->
+    <rect x="360" y="290" width="165" height="22" rx="8" fill="rgba(168,85,247,0.08)" stroke="rgba(168,85,247,0.25)" stroke-width="1"/>
+    <text x="442" y="305" text-anchor="middle" fill="#c084fc" font-size="9" font-weight="600">Celery Worker (every 30 min)</text>
+
+    <!-- Arrow backend→redis -->
+    <line x1="535" y1="160" x2="575" y2="160" stroke="rgba(234,179,8,0.5)" stroke-width="1.5" marker-end="url(#arr-yellow)"/>
+
+    <!-- Redis -->
+    <rect x="575" y="130" width="110" height="60" rx="10" fill="rgba(234,179,8,0.05)" stroke="rgba(234,179,8,0.25)" stroke-width="1"/>
+    <text x="630" y="155" text-anchor="middle" fill="#fbbf24" font-size="10" font-weight="700">REDIS</text>
+    <text x="630" y="170" text-anchor="middle" fill="#888" font-size="8">Cache · Queue</text>
+    <text x="630" y="182" text-anchor="middle" fill="#888" font-size="8">10–30 min TTL</text>
+
+    <!-- DB -->
+    <rect x="575" y="55" width="110" height="60" rx="10" fill="rgba(59,130,246,0.05)" stroke="rgba(59,130,246,0.25)" stroke-width="1"/>
+    <text x="630" y="80" text-anchor="middle" fill="#60a5fa" font-size="10" font-weight="700">DATABASE</text>
+    <text x="630" y="95" text-anchor="middle" fill="#888" font-size="8">SQLite / PostgreSQL</text>
+    <text x="630" y="107" text-anchor="middle" fill="#888" font-size="8">8 Models</text>
+    <line x1="535" y1="100" x2="575" y2="100" stroke="rgba(59,130,246,0.4)" stroke-width="1.5" marker-end="url(#arr-blue)"/>
+
+    <!-- External APIs -->
+    <rect x="710" y="55" width="105" height="240" rx="10" fill="rgba(255,255,255,0.02)" stroke="rgba(255,255,255,0.07)" stroke-width="1"/>
+    <text x="762" y="75" text-anchor="middle" fill="#888" font-size="9" font-weight="700">EXTERNAL</text>
+    <text x="762" y="95" text-anchor="middle" fill="#666" font-size="8">Twelve Data</text>
+    <text x="762" y="110" text-anchor="middle" fill="#555" font-size="7">Quotes · OHLCV</text>
+    <line x1="762" y1="114" x2="762" y2="120" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+    <text x="762" y="133" text-anchor="middle" fill="#666" font-size="8">GNews API</text>
+    <text x="762" y="148" text-anchor="middle" fill="#555" font-size="7">News Articles</text>
+    <line x1="762" y1="152" x2="762" y2="158" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+    <text x="762" y="171" text-anchor="middle" fill="#666" font-size="8">RSS Feeds</text>
+    <text x="762" y="186" text-anchor="middle" fill="#555" font-size="7">Yahoo · MarketWatch</text>
+    <line x1="762" y1="190" x2="762" y2="196" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+    <text x="762" y="209" text-anchor="middle" fill="#666" font-size="8">Reddit PRAW</text>
+    <text x="762" y="224" text-anchor="middle" fill="#555" font-size="7">WSB · r/stocks</text>
+    <line x1="762" y1="228" x2="762" y2="234" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+    <text x="762" y="247" text-anchor="middle" fill="#666" font-size="8">Gemini / Groq</text>
+    <text x="762" y="262" text-anchor="middle" fill="#555" font-size="7">LLM Summaries</text>
+
+    <line x1="710" y1="160" x2="685" y2="160" stroke="rgba(255,255,255,0.15)" stroke-width="1.5" marker-end="url(#arr-white)"/>
+
+    <!-- Arrow defs -->
+    <defs>
+      <marker id="arr" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+        <path d="M0,0 L0,6 L6,3 z" fill="rgba(34,197,94,0.8)"/>
+      </marker>
+      <marker id="arr-purple" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+        <path d="M0,0 L0,6 L6,3 z" fill="rgba(168,85,247,0.8)"/>
+      </marker>
+      <marker id="arr-yellow" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+        <path d="M0,0 L0,6 L6,3 z" fill="rgba(234,179,8,0.8)"/>
+      </marker>
+      <marker id="arr-blue" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+        <path d="M0,0 L0,6 L6,3 z" fill="rgba(59,130,246,0.8)"/>
+      </marker>
+      <marker id="arr-white" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+        <path d="M0,0 L0,6 L6,3 z" fill="rgba(255,255,255,0.3)"/>
+      </marker>
+    </defs>
+  </svg>
+</section>
+
+<!-- ─────────────────────────────────────────────────────────────
+     SLIDE 5: DATA PIPELINE
+───────────────────────────────────────────────────────────────── -->
+<section>
+  <p class="section-label">Data Pipeline</p>
+  <h2>From raw news → scored narrative</h2>
+
+  <div style="margin-top:0.8rem">
+    <!-- Pipeline flow -->
+    <svg viewBox="0 0 820 200" style="width:100%" xmlns="http://www.w3.org/2000/svg" font-family="Inter,sans-serif">
+      <defs>
+        <marker id="pa" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
+          <path d="M0,0 L0,8 L8,4 z" fill="rgba(34,197,94,0.7)"/>
+        </marker>
+      </defs>
+
+      <!-- Step boxes -->
+      <!-- 1 Sources -->
+      <rect x="10" y="60" width="120" height="80" rx="10" fill="#1a1a1a" stroke="rgba(34,197,94,0.25)" stroke-width="1.5"/>
+      <text x="70" y="85" text-anchor="middle" fill="#22c55e" font-size="9" font-weight="700">DATA SOURCES</text>
+      <text x="70" y="101" text-anchor="middle" fill="#777" font-size="8">RSS Feeds (∞)</text>
+      <text x="70" y="113" text-anchor="middle" fill="#777" font-size="8">GNews (100/day)</text>
+      <text x="70" y="125" text-anchor="middle" fill="#777" font-size="8">Reddit · Twelve Data</text>
+      <text x="70" y="50" text-anchor="middle" fill="#444" font-size="8">Every 30 min via Celery</text>
+
+      <line x1="130" y1="100" x2="158" y2="100" stroke="rgba(34,197,94,0.5)" stroke-width="1.5" marker-end="url(#pa)"/>
+
+      <!-- 2 Scrape -->
+      <rect x="158" y="70" width="100" height="60" rx="10" fill="#1a1a1a" stroke="rgba(168,85,247,0.25)" stroke-width="1.5"/>
+      <text x="208" y="93" text-anchor="middle" fill="#c084fc" font-size="9" font-weight="700">SCRAPE</text>
+      <text x="208" y="109" text-anchor="middle" fill="#777" font-size="8">feedparser · PRAW</text>
+      <text x="208" y="121" text-anchor="middle" fill="#777" font-size="8">Dedup by URL</text>
+
+      <line x1="258" y1="100" x2="286" y2="100" stroke="rgba(34,197,94,0.5)" stroke-width="1.5" marker-end="url(#pa)"/>
+
+      <!-- 3 FinBERT -->
+      <rect x="286" y="60" width="120" height="80" rx="10" fill="rgba(34,197,94,0.05)" stroke="rgba(34,197,94,0.35)" stroke-width="2"/>
+      <text x="346" y="83" text-anchor="middle" fill="#22c55e" font-size="9" font-weight="700">FINBERT NLP</text>
+      <text x="346" y="99" text-anchor="middle" fill="#777" font-size="8">Batch inference (32)</text>
+      <text x="346" y="111" text-anchor="middle" fill="#777" font-size="8">pos / neg / neu</text>
+      <text x="346" y="123" text-anchor="middle" fill="#777" font-size="8">compound −1 to +1</text>
+      <text x="346" y="50" text-anchor="middle" fill="#22c55e" font-size="8">★ Core ML Component</text>
+
+      <line x1="406" y1="100" x2="434" y2="100" stroke="rgba(34,197,94,0.5)" stroke-width="1.5" marker-end="url(#pa)"/>
+
+      <!-- 4 Aggregate -->
+      <rect x="434" y="70" width="110" height="60" rx="10" fill="#1a1a1a" stroke="rgba(59,130,246,0.25)" stroke-width="1.5"/>
+      <text x="489" y="93" text-anchor="middle" fill="#60a5fa" font-size="9" font-weight="700">AGGREGATE</text>
+      <text x="489" y="109" text-anchor="middle" fill="#777" font-size="8">Exp. decay weight</text>
+      <text x="489" y="121" text-anchor="middle" fill="#777" font-size="8">Velocity compute</text>
+
+      <line x1="544" y1="100" x2="572" y2="100" stroke="rgba(34,197,94,0.5)" stroke-width="1.5" marker-end="url(#pa)"/>
+
+      <!-- 5 Score -->
+      <rect x="572" y="60" width="110" height="80" rx="10" fill="#1a1a1a" stroke="rgba(234,179,8,0.25)" stroke-width="1.5"/>
+      <text x="627" y="83" text-anchor="middle" fill="#fbbf24" font-size="9" font-weight="700">SCORE + CLASSIFY</text>
+      <text x="627" y="99" text-anchor="middle" fill="#777" font-size="8">Hype (0–100)</text>
+      <text x="627" y="111" text-anchor="middle" fill="#777" font-size="8">Pattern (6 types)</text>
+      <text x="627" y="123" text-anchor="middle" fill="#777" font-size="8">Drift detection</text>
+
+      <line x1="682" y1="100" x2="710" y2="100" stroke="rgba(34,197,94,0.5)" stroke-width="1.5" marker-end="url(#pa)"/>
+
+      <!-- 6 Cache + Serve -->
+      <rect x="710" y="70" width="100" height="60" rx="10" fill="#1a1a1a" stroke="rgba(34,197,94,0.25)" stroke-width="1.5"/>
+      <text x="760" y="93" text-anchor="middle" fill="#22c55e" font-size="9" font-weight="700">CACHE + SERVE</text>
+      <text x="760" y="109" text-anchor="middle" fill="#777" font-size="8">Redis (15 min TTL)</text>
+      <text x="760" y="121" text-anchor="middle" fill="#777" font-size="8">REST → Frontend</text>
+
+      <!-- Step numbers -->
+      <circle cx="70"  cy="165" r="11" fill="rgba(34,197,94,0.1)" stroke="rgba(34,197,94,0.3)" stroke-width="1"/>
+      <text x="70"  y="169" text-anchor="middle" fill="#22c55e" font-size="9" font-weight="700">1</text>
+      <circle cx="208" cy="165" r="11" fill="rgba(168,85,247,0.1)" stroke="rgba(168,85,247,0.3)" stroke-width="1"/>
+      <text x="208" y="169" text-anchor="middle" fill="#c084fc" font-size="9" font-weight="700">2</text>
+      <circle cx="346" cy="165" r="11" fill="rgba(34,197,94,0.15)" stroke="rgba(34,197,94,0.4)" stroke-width="1"/>
+      <text x="346" y="169" text-anchor="middle" fill="#22c55e" font-size="9" font-weight="700">3</text>
+      <circle cx="489" cy="165" r="11" fill="rgba(59,130,246,0.1)" stroke="rgba(59,130,246,0.3)" stroke-width="1"/>
+      <text x="489" y="169" text-anchor="middle" fill="#60a5fa" font-size="9" font-weight="700">4</text>
+      <circle cx="627" cy="165" r="11" fill="rgba(234,179,8,0.1)" stroke="rgba(234,179,8,0.3)" stroke-width="1"/>
+      <text x="627" y="169" text-anchor="middle" fill="#fbbf24" font-size="9" font-weight="700">5</text>
+      <circle cx="760" cy="165" r="11" fill="rgba(34,197,94,0.1)" stroke="rgba(34,197,94,0.3)" stroke-width="1"/>
+      <text x="760" y="169" text-anchor="middle" fill="#22c55e" font-size="9" font-weight="700">6</text>
+    </svg>
+
+    <div class="cols-3" style="margin-top:0.5rem">
+      <div class="card" style="padding:0.7rem">
+        <h3 style="font-size:0.75rem;color:#c084fc;margin:0 0 0.3rem">Background Scraping</h3>
+        <p style="font-size:0.68rem;margin:0">Celery Beat fires every 30 minutes. One task per active ticker runs in parallel. 4 scrapers per ticker.</p>
+      </div>
+      <div class="card" style="padding:0.7rem">
+        <h3 style="font-size:0.75rem;color:#22c55e;margin:0 0 0.3rem">FinBERT Inference</h3>
+        <p style="font-size:0.68rem;margin:0">Batch size 32. GPU auto-detect (MPS/CUDA → CPU). 440 MB cached model. ~10× faster than one-by-one.</p>
+      </div>
+      <div class="card" style="padding:0.7rem">
+        <h3 style="font-size:0.75rem;color:#fbbf24;margin:0 0 0.3rem">On-Demand Cache</h3>
+        <p style="font-size:0.68rem;margin:0">First call ~2–5s. Subsequent calls &lt;100ms from Redis. 8 distinct cache keys, 10–30 min TTLs.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─────────────────────────────────────────────────────────────
+     SLIDE 6: FINBERT — NLP DEEP DIVE
+───────────────────────────────────────────────────────────────── -->
+<section>
+  <p class="section-label">NLP</p>
+  <h2>Why FinBERT — not just VADER</h2>
+  <div class="cols-2" style="margin-top:0.8rem;gap:1.2rem">
+    <div>
+      <div class="card" style="margin-bottom:0.8rem;border-color:rgba(239,68,68,0.2)">
+        <h3 style="color:#f87171;font-size:0.8rem">❌ VADER (General NLP)</h3>
+        <p style="font-size:0.73rem;font-style:italic;color:#777;margin-bottom:0.4rem">"Beat estimates but raised guidance cut"</p>
+        <div style="display:flex;align-items:center;gap:0.5rem">
+          <span style="font-size:0.7rem;color:#aaa">Sentiment:</span>
+          <span class="pill pill-red" style="font-size:0.65rem">NEGATIVE ✗</span>
+        </div>
+        <p style="font-size:0.68rem;color:#666;margin-top:0.4rem">Rule-based lexicon — counts positive/negative words. Misses financial domain nuance.</p>
+      </div>
+      <div class="card-green">
+        <h3 style="color:#4ade80;font-size:0.8rem">✅ FinBERT (Financial BERT)</h3>
+        <p style="font-size:0.73rem;font-style:italic;color:#777;margin-bottom:0.4rem">"Beat estimates but raised guidance cut"</p>
+        <div style="display:flex;align-items:center;gap:0.5rem">
+          <span style="font-size:0.7rem;color:#aaa">Sentiment:</span>
+          <span class="pill" style="font-size:0.65rem">POSITIVE ✓</span>
+        </div>
+        <p style="font-size:0.68rem;color:#666;margin-top:0.4rem">Pre-trained on 100k+ Reuters reports, earnings calls, FPhrasebook. Understands context.</p>
+      </div>
+    </div>
+    <div>
+      <div class="card" style="margin-bottom:0.7rem">
+        <h3 style="font-size:0.78rem">Output per article</h3>
+        <div class="score-row" style="margin-top:0.5rem">
+          <div class="score-label"><span>Positive</span><span class="green">0.82</span></div>
+          <div class="score-track"><div class="score-fill" style="width:82%;background:#22c55e"></div></div>
+        </div>
+        <div class="score-row">
+          <div class="score-label"><span>Negative</span><span class="danger">0.10</span></div>
+          <div class="score-track"><div class="score-fill" style="width:10%;background:#ef4444"></div></div>
+        </div>
+        <div class="score-row">
+          <div class="score-label"><span>Neutral</span><span class="muted">0.08</span></div>
+          <div class="score-track"><div class="score-fill" style="width:8%;background:#666"></div></div>
+        </div>
+        <div style="margin-top:0.5rem;font-size:0.68rem;color:#888">
+          Compound score: <span class="green">+0.72</span>&nbsp; · &nbsp;Label: <span class="green">Positive</span>
+        </div>
+      </div>
+      <div class="card">
+        <h3 style="font-size:0.78rem">Exponential decay weighting</h3>
+        <p style="font-size:0.68rem;margin:0.3rem 0 0">Articles decay with half-life of 3 days. Today's coverage counts far more than last week's.</p>
+        <div class="code-block" style="margin-top:0.5rem;font-size:0.62rem">
+          weight = exp(−λ × age_days)<br/>
+          λ = ln(2) / 3&nbsp;&nbsp;&nbsp;# half-life 3 days<br/>
+          avg = Σ(score × weight) / Σ(weights)
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─────────────────────────────────────────────────────────────
+     SLIDE 7: HYPE SCORING
+───────────────────────────────────────────────────────────────── -->
+<section>
+  <p class="section-label">Scoring</p>
+  <h2>3-Factor Hype Score Model</h2>
+
+  <svg viewBox="0 0 820 250" style="width:100%;margin-top:0.5rem" xmlns="http://www.w3.org/2000/svg" font-family="Inter,sans-serif">
+    <!-- Central hype score -->
+    <circle cx="410" cy="125" r="68" fill="rgba(234,179,8,0.06)" stroke="rgba(234,179,8,0.3)" stroke-width="2"/>
+    <text x="410" y="110" text-anchor="middle" fill="#fbbf24" font-size="11" font-weight="700">HYPE SCORE</text>
+    <text x="410" y="130" text-anchor="middle" fill="#fff" font-size="28" font-weight="900">0–100</text>
+    <text x="410" y="150" text-anchor="middle" fill="#666" font-size="9">Combined signal</text>
+
+    <!-- Factor 1: Sentiment Imbalance -->
+    <rect x="20" y="30" width="200" height="100" rx="12" fill="rgba(239,68,68,0.05)" stroke="rgba(239,68,68,0.25)" stroke-width="1.5"/>
+    <text x="120" y="55" text-anchor="middle" fill="#f87171" font-size="10" font-weight="700">SENTIMENT IMBALANCE</text>
+    <text x="120" y="73" text-anchor="middle" fill="#555" font-size="9">0 – 40 pts</text>
+    <text x="120" y="90" text-anchor="middle" fill="#888" font-size="8">How one-sided is coverage?</text>
+    <text x="120" y="104" text-anchor="middle" fill="#888" font-size="8">90% bullish = suspicious amplification</text>
+    <text x="120" y="118" text-anchor="middle" fill="#555" font-size="8">(dominant_ratio − 0.5) × 2 × 40</text>
+
+    <!-- Factor 2: Velocity -->
+    <rect x="20" y="150" width="200" height="90" rx="12" fill="rgba(168,85,247,0.05)" stroke="rgba(168,85,247,0.25)" stroke-width="1.5"/>
+    <text x="120" y="175" text-anchor="middle" fill="#c084fc" font-size="10" font-weight="700">VELOCITY FACTOR</text>
+    <text x="120" y="193" text-anchor="middle" fill="#555" font-size="9">0 – 35 pts</text>
+    <text x="120" y="210" text-anchor="middle" fill="#888" font-size="8">Fast-moving attention = hype signal</text>
+    <text x="120" y="224" text-anchor="middle" fill="#555" font-size="8">min(velocity/100, 1.0) × 35</text>
+
+    <!-- Factor 3: Source Concentration -->
+    <rect x="600" y="90" width="210" height="90" rx="12" fill="rgba(59,130,246,0.05)" stroke="rgba(59,130,246,0.25)" stroke-width="1.5"/>
+    <text x="705" y="115" text-anchor="middle" fill="#60a5fa" font-size="10" font-weight="700">SOURCE CONCENTRATION</text>
+    <text x="705" y="133" text-anchor="middle" fill="#555" font-size="9">0 – 25 pts</text>
+    <text x="705" y="150" text-anchor="middle" fill="#888" font-size="8">2 outlets ≠ independent confirmation</text>
+    <text x="705" y="164" text-anchor="middle" fill="#555" font-size="8">max(0, 1 − sources/total) × 25</text>
+
+    <!-- Arrows to center -->
+    <line x1="220" y1="80" x2="342" y2="100" stroke="rgba(239,68,68,0.4)" stroke-width="1.5" marker-end="url(#pa2)"/>
+    <line x1="220" y1="195" x2="342" y2="150" stroke="rgba(168,85,247,0.4)" stroke-width="1.5" marker-end="url(#pa3)"/>
+    <line x1="600" y1="135" x2="478" y2="125" stroke="rgba(59,130,246,0.4)" stroke-width="1.5" marker-end="url(#pa4)"/>
+
+    <defs>
+      <marker id="pa2" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+        <path d="M0,0 L0,6 L6,3 z" fill="rgba(239,68,68,0.8)"/>
+      </marker>
+      <marker id="pa3" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+        <path d="M0,0 L0,6 L6,3 z" fill="rgba(168,85,247,0.8)"/>
+      </marker>
+      <marker id="pa4" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+        <path d="M0,0 L0,6 L6,3 z" fill="rgba(59,130,246,0.8)"/>
+      </marker>
+    </defs>
+
+    <!-- Thresholds -->
+    <rect x="600" y="10" width="210" height="72" rx="10" fill="rgba(255,255,255,0.02)" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+    <text x="705" y="28" text-anchor="middle" fill="#666" font-size="9" font-weight="700">RISK LEVELS</text>
+    <text x="618" y="45" fill="#f87171" font-size="9">≥70</text><text x="645" y="45" fill="#888" font-size="9">Extreme 🔴</text>
+    <text x="618" y="58" fill="#fbbf24" font-size="9">≥45</text><text x="645" y="58" fill="#888" font-size="9">High 🟡</text>
+    <text x="618" y="71" fill="#60a5fa" font-size="9">≥20</text><text x="645" y="71" fill="#888" font-size="9">Moderate 🔵</text>
+    <text x="618" y="84" fill="#22c55e" font-size="9">&lt;20</text><text x="645" y="84" fill="#888" font-size="9">Low 🟢</text>
+  </svg>
+</section>
+
+<!-- ─────────────────────────────────────────────────────────────
+     SLIDE 8: PATTERN CLASSIFIER
+───────────────────────────────────────────────────────────────── -->
+<section>
+  <p class="section-label">Classification</p>
+  <h2>6 Narrative Archetypes — Explainable AI</h2>
+  <p style="font-size:0.72rem;color:#666;margin-bottom:0.8rem">Rule-based classifier — no black-box ML. Users can see <em>why</em> a stock is flagged.</p>
+
+  <div class="cols-2" style="gap:0.7rem">
+    <div class="card" style="border-left:3px solid #ef4444">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start">
+        <h3 style="color:#f87171;font-size:0.78rem;margin:0">🔥 Short Squeeze Dynamics</h3>
+        <span class="pill pill-red" style="font-size:0.6rem">Extreme Risk</span>
+      </div>
+      <p style="font-size:0.65rem;margin:0.3rem 0 0">Extreme bullish + accelerating velocity + imbalanced + high hype. GME/AMC pattern — high-vol reversal risk.</p>
+    </div>
+    <div class="card" style="border-left:3px solid #f97316">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start">
+        <h3 style="color:#fb923c;font-size:0.78rem;margin:0">😨 Macro Fear Pattern</h3>
+        <span class="pill pill-red" style="font-size:0.6rem">High Risk</span>
+      </div>
+      <p style="font-size:0.65rem;margin:0.3rem 0 0">Sustained negative + broad coverage + elevated hype. Market anxiety around Fed decisions, regulation.</p>
+    </div>
+    <div class="card" style="border-left:3px solid #eab308">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start">
+        <h3 style="color:#fbbf24;font-size:0.78rem;margin:0">🌊 Theme/Sector Wave</h3>
+        <span class="pill pill-yellow" style="font-size:0.6rem">High Risk</span>
+      </div>
+      <p style="font-size:0.65rem;margin:0.3rem 0 0">Positive + accelerating + diverse sources + high hype. Sector rotation — AI boom, clean energy, crypto cycles.</p>
+    </div>
+    <div class="card" style="border-left:3px solid #3b82f6">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start">
+        <h3 style="color:#60a5fa;font-size:0.78rem;margin:0">📉 Narrative Cool-off</h3>
+        <span class="pill pill-blue" style="font-size:0.6rem">Moderate</span>
+      </div>
+      <p style="font-size:0.65rem;margin:0.3rem 0 0">Velocity decelerating + previously high hype + coverage dropped. Story fading, retail attention moving elsewhere.</p>
+    </div>
+    <div class="card" style="border-left:3px solid #a855f7">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start">
+        <h3 style="color:#c084fc;font-size:0.78rem;margin:0">⏳ Pre-Catalyst Build</h3>
+        <span class="pill pill-purple" style="font-size:0.6rem">Moderate</span>
+      </div>
+      <p style="font-size:0.65rem;margin:0.3rem 0 0">Accelerating mentions + neutral/reserved tone. Anticipatory build — earnings, FDA decision, product launch.</p>
+    </div>
+    <div class="card" style="border-left:3px solid #22c55e">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start">
+        <h3 style="color:#4ade80;font-size:0.78rem;margin:0">✅ Balanced Coverage</h3>
+        <span class="pill" style="font-size:0.6rem">Low Risk</span>
+      </div>
+      <p style="font-size:0.65rem;margin:0.3rem 0 0">No unusual signals. Routine, diversified coverage — healthy information flow, no amplification bias.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ─────────────────────────────────────────────────────────────
+     SLIDE 9: KEY FEATURES
+───────────────────────────────────────────────────────────────── -->
+<section>
+  <p class="section-label">Features</p>
+  <h2>What users see on the Stock Page</h2>
+  <div class="cols-2" style="gap:0.8rem;margin-top:0.7rem">
+    <div>
+      <div class="card" style="margin-bottom:0.7rem">
+        <h3 style="font-size:0.8rem">📈 Live Price + Chart</h3>
+        <p style="font-size:0.68rem">Twelve Data OHLCV. Range selector: 1D / 7D / 1M / 3M. Recharts AreaChart with gradient fill. Price change badge updates dynamically.</p>
+      </div>
+      <div class="card" style="margin-bottom:0.7rem">
+        <h3 style="font-size:0.8rem">🧠 Narrative Summary</h3>
+        <p style="font-size:0.68rem">Gemini / Groq generates a 3–4 sentence plain-English summary grounded in the current sentiment, velocity, and pattern data. No speculation. Cached 15 min.</p>
+      </div>
+      <div class="card">
+        <h3 style="font-size:0.8rem">📰 News Aggregation</h3>
+        <p style="font-size:0.68rem">GNews + RSS. Each article shows sentiment label, compound score, source, and time. Sorted by recency. Clicking awards +10 XP.</p>
+      </div>
+    </div>
+    <div>
+      <div class="card" style="margin-bottom:0.7rem">
+        <h3 style="font-size:0.8rem">📊 Analysis Cards</h3>
+        <p style="font-size:0.68rem">4-card grid: Sentiment (−1 to +1), Narrative Velocity (0–100), Hype Score (0–100), Pattern Archetype. Animated bars, tooltips, color-coded.</p>
+      </div>
+      <div class="card" style="margin-bottom:0.7rem">
+        <h3 style="font-size:0.8rem">⏱ Narrative Timeline</h3>
+        <p style="font-size:0.68rem">91-day rolling chart (Recharts). Shift detection — annotated when narrative meaningfully changed direction. Window stats: 7d / 30d / 90d.</p>
+      </div>
+      <div class="card">
+        <h3 style="font-size:0.8rem">💬 AI Chat Panel</h3>
+        <p style="font-size:0.68rem">Sticky sidebar. Users bring own Gemini/Groq key (encrypted at rest with Fernet). Context-aware — chat knows current sentiment, velocity, headlines.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─────────────────────────────────────────────────────────────
+     SLIDE 10: AUTH + SECURITY
+───────────────────────────────────────────────────────────────── -->
+<section>
+  <p class="section-label">Auth &amp; Security</p>
+  <h2>Authentication &amp; Key Management</h2>
+  <div class="cols-2" style="gap:1rem;margin-top:0.8rem">
+    <div>
+      <div class="card-green" style="margin-bottom:0.8rem">
+        <h3 style="font-size:0.82rem">JWT Authentication Flow</h3>
+        <svg viewBox="0 0 320 130" style="width:100%;margin-top:0.5rem" xmlns="http://www.w3.org/2000/svg" font-family="Inter,sans-serif">
+          <defs>
+            <marker id="ja" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+              <path d="M0,0 L0,6 L6,3 z" fill="rgba(34,197,94,0.7)"/>
+            </marker>
+          </defs>
+          <rect x="5"   y="45" width="70" height="35" rx="7" fill="#1a1a1a" stroke="rgba(34,197,94,0.2)" stroke-width="1"/>
+          <text x="40" y="66" text-anchor="middle" fill="#aaa" font-size="9">Browser</text>
+          <line x1="75" y1="62" x2="100" y2="62" stroke="rgba(34,197,94,0.5)" stroke-width="1.5" marker-end="url(#ja)"/>
+          <text x="88" y="56" text-anchor="middle" fill="#555" font-size="7">login</text>
+          <rect x="100" y="45" width="70" height="35" rx="7" fill="#1a1a1a" stroke="rgba(34,197,94,0.2)" stroke-width="1"/>
+          <text x="135" y="66" text-anchor="middle" fill="#aaa" font-size="9">Django</text>
+          <line x1="170" y1="55" x2="195" y2="55" stroke="rgba(34,197,94,0.5)" stroke-width="1.5" marker-end="url(#ja)"/>
+          <text x="182" y="49" text-anchor="middle" fill="#22c55e" font-size="7">access</text>
+          <line x1="170" y1="70" x2="195" y2="70" stroke="rgba(34,197,94,0.3)" stroke-width="1.5" marker-end="url(#ja)"/>
+          <text x="182" y="80" text-anchor="middle" fill="#555" font-size="7">refresh</text>
+          <rect x="195" y="45" width="70" height="35" rx="7" fill="rgba(34,197,94,0.06)" stroke="rgba(34,197,94,0.2)" stroke-width="1"/>
+          <text x="230" y="60" text-anchor="middle" fill="#4ade80" font-size="8">localStorage</text>
+          <text x="230" y="73" text-anchor="middle" fill="#555" font-size="7">silent refresh</text>
+          <text x="160" y="115" text-anchor="middle" fill="#555" font-size="8">Short-lived access token · Long-lived refresh · Auto-refresh via interceptor</text>
+        </svg>
+      </div>
+      <div class="card">
+        <h3 style="font-size:0.82rem">What requires login</h3>
+        <ul style="margin-top:0.4rem">
+          <li style="font-size:0.68rem">AI Chat (uses user's own API key)</li>
+          <li style="font-size:0.68rem">Watchlist (save/remove tickers)</li>
+          <li style="font-size:0.68rem">Settings (API key management)</li>
+          <li style="font-size:0.68rem">All analysis/prices are public</li>
+        </ul>
+      </div>
+    </div>
+    <div>
+      <div class="card" style="margin-bottom:0.8rem">
+        <h3 style="font-size:0.82rem">🔐 API Key Encryption</h3>
+        <div class="code-block" style="margin-top:0.5rem">
+          # Fernet symmetric encryption<br/>
+          key = Fernet.generate_key()<br/>
+          f   = Fernet(settings.FERNET_KEY)<br/>
+          encrypted = f.encrypt(raw_key)<br/><br/>
+          # Decrypted only at request time<br/>
+          # Never logged · Never returned
+        </div>
+        <p style="font-size:0.65rem;margin-top:0.5rem;color:#666">Each user's Gemini/Groq key stored encrypted. Decrypted in memory only when making LLM call. Never surfaced via API.</p>
+      </div>
+      <div class="card">
+        <h3 style="font-size:0.82rem">Other Security Measures</h3>
+        <ul style="margin-top:0.4rem">
+          <li style="font-size:0.68rem">CORS restricted to allowed origins</li>
+          <li style="font-size:0.68rem">DRF throttling on public endpoints</li>
+          <li style="font-size:0.68rem">Environment variables for all secrets</li>
+          <li style="font-size:0.68rem">django-cors-headers, no wildcard CORS</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─────────────────────────────────────────────────────────────
+     SLIDE 11: GAMIFICATION
+───────────────────────────────────────────────────────────────── -->
+<section>
+  <p class="section-label">Engagement</p>
+  <h2>Gamification System — optional &amp; toggle-able</h2>
+  <div class="cols-3" style="margin-top:0.8rem">
+    <div>
+      <div class="card-green" style="margin-bottom:0.7rem">
+        <h3 style="font-size:0.82rem">⚡ XP Actions</h3>
+        <table style="margin-top:0.4rem">
+          <tr><td style="color:#aaa">Search stock</td><td style="color:#22c55e;text-align:right">+10 XP</td></tr>
+          <tr><td style="color:#aaa">Visit page</td><td style="color:#22c55e;text-align:right">+15 XP</td></tr>
+          <tr><td style="color:#aaa">Chart range</td><td style="color:#22c55e;text-align:right">+5 XP</td></tr>
+          <tr><td style="color:#aaa">Chat message</td><td style="color:#22c55e;text-align:right">+20 XP</td></tr>
+          <tr><td style="color:#aaa">News click</td><td style="color:#22c55e;text-align:right">+10 XP</td></tr>
+          <tr><td style="color:#aaa">Daily challenge</td><td style="color:#22c55e;text-align:right">+50 XP</td></tr>
+        </table>
+      </div>
+    </div>
+    <div>
+      <div class="card" style="margin-bottom:0.7rem">
+        <h3 style="font-size:0.82rem">🎯 Missions (5 total)</h3>
+        <ul style="margin-top:0.4rem">
+          <li style="font-size:0.68rem">First Search</li>
+          <li style="font-size:0.68rem">Market Explorer (5 stocks)</li>
+          <li style="font-size:0.68rem">Chart Analyst</li>
+          <li style="font-size:0.68rem">Ask the AI</li>
+          <li style="font-size:0.68rem">News Reader</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 style="font-size:0.82rem">🏆 Badges (3 total)</h3>
+        <ul style="margin-top:0.4rem">
+          <li style="font-size:0.68rem">Stock Explorer — 3 stocks visited</li>
+          <li style="font-size:0.68rem">AI Whisperer — 5 chats sent</li>
+          <li style="font-size:0.68rem">News Junkie — 5 articles opened</li>
+        </ul>
+      </div>
+    </div>
+    <div>
+      <div class="card" style="margin-bottom:0.7rem">
+        <h3 style="font-size:0.82rem">🎊 Celebrations</h3>
+        <p style="font-size:0.68rem">Canvas confetti animation fires on:</p>
+        <ul style="margin-top:0.3rem">
+          <li style="font-size:0.68rem">Every 100 XP level-up</li>
+          <li style="font-size:0.68rem">Mission completion</li>
+          <li style="font-size:0.68rem">Badge unlock</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 style="font-size:0.82rem">💾 Persistence</h3>
+        <p style="font-size:0.68rem">localStorage key <code style="color:#22c55e;font-size:0.62rem">mn_gamification_v1</code>. Survives page refresh. useReducer + Context API. No backend needed.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─────────────────────────────────────────────────────────────
+     SLIDE 12: ML MODEL (EXPERIMENTAL)
+───────────────────────────────────────────────────────────────── -->
+<section>
+  <p class="section-label">Machine Learning</p>
+  <h2>Price-Impact Classifier — Experimental Feature</h2>
+  <div class="cols-2" style="margin-top:0.8rem;gap:1rem">
+    <div>
+      <div class="card" style="margin-bottom:0.8rem">
+        <h3 style="font-size:0.82rem">Goal</h3>
+        <p style="font-size:0.7rem">Predict whether a narrative will move price <span class="green">UP</span> / <span class="danger">DOWN</span> / <span class="muted">FLAT</span> within 24 hours of publication.</p>
+        <div style="margin-top:0.5rem;display:flex;gap:0.5rem;flex-wrap:wrap">
+          <span class="pill">Random Forest</span>
+          <span class="pill pill-purple">XGBoost</span>
+        </div>
+      </div>
+      <div class="card">
+        <h3 style="font-size:0.82rem">Training Data</h3>
+        <ul style="margin-top:0.3rem">
+          <li style="font-size:0.68rem">PriceImpact records — article pub time + price 1h/4h/24h later</li>
+          <li style="font-size:0.68rem">Label: up (&gt;+0.15%) · down (&lt;−0.15%) · flat</li>
+          <li style="font-size:0.68rem">Trains automatically when 50+ samples exist</li>
+          <li style="font-size:0.68rem">Management cmd: <code style="color:#22c55e;font-size:0.6rem">python manage.py train_model</code></li>
+        </ul>
+      </div>
+    </div>
+    <div>
+      <div class="card">
+        <h3 style="font-size:0.82rem">12 Features</h3>
+        <div style="margin-top:0.5rem">
+          <div style="display:flex;flex-wrap:wrap;gap:0.35rem">
+            <span class="pill pill-blue" style="font-size:0.6rem">compound_score</span>
+            <span class="pill pill-blue" style="font-size:0.6rem">positive_prob</span>
+            <span class="pill pill-blue" style="font-size:0.6rem">negative_prob</span>
+            <span class="pill pill-blue" style="font-size:0.6rem">neutral_prob</span>
+            <span class="pill pill-purple" style="font-size:0.6rem">source_type</span>
+            <span class="pill pill-purple" style="font-size:0.6rem">is_news</span>
+            <span class="pill pill-purple" style="font-size:0.6rem">is_reddit</span>
+            <span class="pill pill-yellow" style="font-size:0.6rem">hour_of_day</span>
+            <span class="pill pill-yellow" style="font-size:0.6rem">day_of_week</span>
+            <span class="pill pill-yellow" style="font-size:0.6rem">is_market_hours</span>
+            <span class="pill" style="font-size:0.6rem">hype_level</span>
+            <span class="pill" style="font-size:0.6rem">article_count</span>
+          </div>
+        </div>
+        <div class="divider" style="margin:0.7rem 0"></div>
+        <h3 style="font-size:0.78rem">Design Choice: Why not core product?</h3>
+        <p style="font-size:0.67rem;margin:0.3rem 0 0;color:#777">Displayed as supplementary signal with confidence score. Markets are hard to predict — we emphasize transparency over false certainty. Shown only when model is trained.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─────────────────────────────────────────────────────────────
+     SLIDE 13: TECH STACK
+───────────────────────────────────────────────────────────────── -->
+<section>
+  <p class="section-label">Tech Stack</p>
+  <h2>Technologies Used</h2>
+  <div class="cols-2" style="gap:1rem;margin-top:0.7rem">
+    <div>
+      <p class="section-label" style="color:#60a5fa">Frontend</p>
+      <table>
+        <thead><tr><th>Tech</th><th>Purpose</th></tr></thead>
+        <tbody>
+          <tr><td><span class="green">React 19</span></td><td>Component UI</td></tr>
+          <tr><td>TypeScript</td><td>Type safety</td></tr>
+          <tr><td>Vite</td><td>Dev server + build (HMR, ESM)</td></tr>
+          <tr><td>Tailwind CSS v4</td><td>Dark theme, custom tokens</td></tr>
+          <tr><td>Recharts</td><td>Price charts + timeline</td></tr>
+          <tr><td>React Router v6</td><td>Client-side routing</td></tr>
+          <tr><td>Context API</td><td>Auth + Gamification state</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div>
+      <p class="section-label" style="color:#22c55e">Backend</p>
+      <table>
+        <thead><tr><th>Tech</th><th>Purpose</th></tr></thead>
+        <tbody>
+          <tr><td><span class="green">Django 4.2 + DRF</span></td><td>REST API + ORM</td></tr>
+          <tr><td>Celery 5 + Redis</td><td>Background tasks + cache</td></tr>
+          <tr><td>SimpleJWT</td><td>JWT access + refresh tokens</td></tr>
+          <tr><td>FinBERT (HuggingFace)</td><td>Financial NLP</td></tr>
+          <tr><td>scikit-learn + XGBoost</td><td>Price-impact classifier</td></tr>
+          <tr><td>cryptography (Fernet)</td><td>API key encryption</td></tr>
+          <tr><td>Gemini + Groq</td><td>LLM summaries + chat</td></tr>
+          <tr><td>feedparser + PRAW</td><td>RSS + Reddit scraping</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ─────────────────────────────────────────────────────────────
+     SLIDE 14: DATABASE SCHEMA
+───────────────────────────────────────────────────────────────── -->
+<section>
+  <p class="section-label">Data Model</p>
+  <h2>Database Schema — 8 Models</h2>
+  <svg viewBox="0 0 820 290" style="width:100%;margin-top:0.5rem" xmlns="http://www.w3.org/2000/svg" font-family="Inter,sans-serif">
+    <defs>
+      <marker id="da" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+        <path d="M0,0 L0,6 L6,3 z" fill="rgba(34,197,94,0.5)"/>
+      </marker>
+    </defs>
+
+    <!-- User -->
+    <rect x="10" y="10" width="130" height="55" rx="8" fill="#1a1a1a" stroke="rgba(59,130,246,0.3)" stroke-width="1.5"/>
+    <text x="75" y="28" text-anchor="middle" fill="#60a5fa" font-size="10" font-weight="700">User</text>
+    <text x="75" y="43" text-anchor="middle" fill="#555" font-size="8">username · email</text>
+    <text x="75" y="55" text-anchor="middle" fill="#555" font-size="8">password (hashed)</text>
+
+    <!-- UserAPIKey -->
+    <rect x="10" y="90" width="130" height="55" rx="8" fill="#1a1a1a" stroke="rgba(59,130,246,0.2)" stroke-width="1"/>
+    <text x="75" y="108" text-anchor="middle" fill="#93c5fd" font-size="9" font-weight="700">UserAPIKey</text>
+    <text x="75" y="123" text-anchor="middle" fill="#555" font-size="8">service · encrypted_key</text>
+    <text x="75" y="135" text-anchor="middle" fill="#555" font-size="8">Fernet encrypted</text>
+    <line x1="75" y1="65" x2="75" y2="90" stroke="rgba(59,130,246,0.3)" stroke-width="1" marker-end="url(#da)"/>
+
+    <!-- Stock -->
+    <rect x="200" y="10" width="140" height="55" rx="8" fill="rgba(34,197,94,0.05)" stroke="rgba(34,197,94,0.35)" stroke-width="1.5"/>
+    <text x="270" y="28" text-anchor="middle" fill="#22c55e" font-size="10" font-weight="700">Stock</text>
+    <text x="270" y="43" text-anchor="middle" fill="#555" font-size="8">ticker · name · sector</text>
+    <text x="270" y="55" text-anchor="middle" fill="#555" font-size="8">is_active</text>
+
+    <!-- Narrative -->
+    <rect x="200" y="95" width="140" height="70" rx="8" fill="#1a1a1a" stroke="rgba(34,197,94,0.2)" stroke-width="1"/>
+    <text x="270" y="113" text-anchor="middle" fill="#86efac" font-size="9" font-weight="700">Narrative</text>
+    <text x="270" y="128" text-anchor="middle" fill="#555" font-size="8">title · content · source</text>
+    <text x="270" y="140" text-anchor="middle" fill="#555" font-size="8">url (unique) · published_at</text>
+    <text x="270" y="152" text-anchor="middle" fill="#555" font-size="8">FK → Stock</text>
+    <line x1="270" y1="65" x2="270" y2="95" stroke="rgba(34,197,94,0.3)" stroke-width="1" marker-end="url(#da)"/>
+
+    <!-- SentimentScore -->
+    <rect x="200" y="195" width="140" height="65" rx="8" fill="#1a1a1a" stroke="rgba(34,197,94,0.15)" stroke-width="1"/>
+    <text x="270" y="213" text-anchor="middle" fill="#86efac" font-size="9" font-weight="700">SentimentScore</text>
+    <text x="270" y="228" text-anchor="middle" fill="#555" font-size="8">label · compound</text>
+    <text x="270" y="240" text-anchor="middle" fill="#555" font-size="8">pos · neg · neu probs</text>
+    <text x="270" y="252" text-anchor="middle" fill="#555" font-size="8">FK → Narrative (1:1)</text>
+    <line x1="270" y1="165" x2="270" y2="195" stroke="rgba(34,197,94,0.2)" stroke-width="1" marker-end="url(#da)"/>
+
+    <!-- PriceImpact -->
+    <rect x="370" y="195" width="145" height="80" rx="8" fill="#1a1a1a" stroke="rgba(234,179,8,0.2)" stroke-width="1"/>
+    <text x="442" y="213" text-anchor="middle" fill="#fbbf24" font-size="9" font-weight="700">PriceImpact</text>
+    <text x="442" y="228" text-anchor="middle" fill="#555" font-size="8">price_at_publish</text>
+    <text x="442" y="240" text-anchor="middle" fill="#555" font-size="8">price_1h · price_4h · price_24h</text>
+    <text x="442" y="252" text-anchor="middle" fill="#555" font-size="8">impact_% · direction_24h</text>
+    <text x="442" y="264" text-anchor="middle" fill="#555" font-size="8">FK → Narrative</text>
+    <line x1="340" y1="235" x2="370" y2="235" stroke="rgba(234,179,8,0.2)" stroke-width="1" marker-end="url(#da)"/>
+
+    <!-- VelocityMetric -->
+    <rect x="390" y="10" width="145" height="70" rx="8" fill="#1a1a1a" stroke="rgba(168,85,247,0.2)" stroke-width="1"/>
+    <text x="462" y="28" text-anchor="middle" fill="#c084fc" font-size="9" font-weight="700">VelocityMetric</text>
+    <text x="462" y="43" text-anchor="middle" fill="#555" font-size="8">mention_count · velocity_score</text>
+    <text x="462" y="55" text-anchor="middle" fill="#555" font-size="8">trend · window</text>
+    <text x="462" y="67" text-anchor="middle" fill="#555" font-size="8">FK → Stock</text>
+    <line x1="340" y1="35" x2="390" y2="35" stroke="rgba(168,85,247,0.2)" stroke-width="1" marker-end="url(#da)"/>
+
+    <!-- HypeScore -->
+    <rect x="390" y="105" width="145" height="75" rx="8" fill="#1a1a1a" stroke="rgba(234,179,8,0.2)" stroke-width="1"/>
+    <text x="462" y="123" text-anchor="middle" fill="#fbbf24" font-size="9" font-weight="700">HypeScore</text>
+    <text x="462" y="138" text-anchor="middle" fill="#555" font-size="8">score · level (Low–Extreme)</text>
+    <text x="462" y="150" text-anchor="middle" fill="#555" font-size="8">imbalance · velocity · concentration</text>
+    <text x="462" y="162" text-anchor="middle" fill="#555" font-size="8">explanation · FK → Stock</text>
+    <line x1="340" y1="37" x2="390" y2="37" stroke="rgba(255,255,255,0)" stroke-width="0"/>
+    <line x1="340" y1="142" x2="390" y2="142" stroke="rgba(234,179,8,0.2)" stroke-width="1" marker-end="url(#da)"/>
+
+    <!-- Watchlist -->
+    <rect x="580" y="10" width="140" height="55" rx="8" fill="#1a1a1a" stroke="rgba(59,130,246,0.2)" stroke-width="1"/>
+    <text x="650" y="28" text-anchor="middle" fill="#93c5fd" font-size="9" font-weight="700">Watchlist</text>
+    <text x="650" y="43" text-anchor="middle" fill="#555" font-size="8">FK → User · FK → Stock</text>
+    <text x="650" y="55" text-anchor="middle" fill="#555" font-size="8">created_at</text>
+    <line x1="535" y1="35" x2="580" y2="35" stroke="rgba(59,130,246,0.2)" stroke-width="1" marker-end="url(#da)"/>
+
+    <!-- Index labels -->
+    <rect x="580" y="200" width="230" height="75" rx="8" fill="rgba(34,197,94,0.03)" stroke="rgba(34,197,94,0.1)" stroke-width="1"/>
+    <text x="695" y="217" text-anchor="middle" fill="#555" font-size="9" font-weight="700">DB Indexes</text>
+    <text x="695" y="232" text-anchor="middle" fill="#444" font-size="8">(stock, −published_at) on Narrative</text>
+    <text x="695" y="245" text-anchor="middle" fill="#444" font-size="8">(stock, −analyzed_at) on SentimentScore</text>
+    <text x="695" y="258" text-anchor="middle" fill="#444" font-size="8">(stock, −computed_at) on VelocityMetric</text>
+    <text x="695" y="271" text-anchor="middle" fill="#444" font-size="8">(direction_24h) on PriceImpact (ML)</text>
+  </svg>
+</section>
+
+<!-- ─────────────────────────────────────────────────────────────
+     SLIDE 15: BY THE NUMBERS
+───────────────────────────────────────────────────────────────── -->
+<section>
+  <p class="section-label">By The Numbers</p>
+  <h2>What we built</h2>
+  <div class="cols-4" style="margin-top:1rem">
+    <div class="card" style="text-align:center;padding:1.2rem 0.5rem">
+      <div class="stat-num">20+</div>
+      <div class="stat-label">REST API endpoints</div>
+    </div>
+    <div class="card" style="text-align:center;padding:1.2rem 0.5rem">
+      <div class="stat-num">8</div>
+      <div class="stat-label">Database models</div>
+    </div>
+    <div class="card" style="text-align:center;padding:1.2rem 0.5rem">
+      <div class="stat-num">15</div>
+      <div class="stat-label">React components</div>
+    </div>
+    <div class="card" style="text-align:center;padding:1.2rem 0.5rem">
+      <div class="stat-num">6</div>
+      <div class="stat-label">Narrative archetypes</div>
+    </div>
+  </div>
+  <div class="cols-4" style="margin-top:0.7rem">
+    <div class="card" style="text-align:center;padding:1rem 0.5rem">
+      <div class="stat-num">4</div>
+      <div class="stat-label">Data scrapers</div>
+    </div>
+    <div class="card" style="text-align:center;padding:1rem 0.5rem">
+      <div class="stat-num">440MB</div>
+      <div class="stat-label">FinBERT model size</div>
+    </div>
+    <div class="card" style="text-align:center;padding:1rem 0.5rem">
+      <div class="stat-num">91</div>
+      <div class="stat-label">Day narrative timeline</div>
+    </div>
+    <div class="card" style="text-align:center;padding:1rem 0.5rem">
+      <div class="stat-num">30m</div>
+      <div class="stat-label">Celery scrape interval</div>
+    </div>
+  </div>
+  <div class="cols-2" style="margin-top:0.7rem">
+    <div class="card" style="text-align:center;padding:1rem">
+      <div class="stat-num" style="font-size:1.6rem">~3,500</div>
+      <div class="stat-label">lines of Python (backend)</div>
+    </div>
+    <div class="card" style="text-align:center;padding:1rem">
+      <div class="stat-num" style="font-size:1.6rem">~2,500</div>
+      <div class="stat-label">lines of TypeScript (frontend)</div>
+    </div>
+  </div>
+</section>
+
+<!-- ─────────────────────────────────────────────────────────────
+     SLIDE 16: COMPETITIVE EDGE
+───────────────────────────────────────────────────────────────── -->
+<section>
+  <p class="section-label">Why MarketNoise</p>
+  <h2>Competitive Advantages</h2>
+  <div class="cols-2" style="gap:0.8rem;margin-top:0.8rem">
+    <div class="card-green">
+      <h3 style="font-size:0.82rem">🎯 Narrative-First, Not Price-First</h3>
+      <p style="font-size:0.7rem">Most fintech focuses on price prediction. We explain <em>why</em> attention is moving — a fundamentally different and more transparent value prop.</p>
+    </div>
+    <div class="card-green">
+      <h3 style="font-size:0.82rem">🔬 Financial-Domain NLP</h3>
+      <p style="font-size:0.7rem">FinBERT trained on 100k+ financial docs understands earnings language, regulatory risk, guidance cuts. VADER would get these wrong.</p>
+    </div>
+    <div class="card-green">
+      <h3 style="font-size:0.82rem">🔍 Transparent Scoring</h3>
+      <p style="font-size:0.7rem">6 explainable patterns, 3-factor hype model. Users see <em>why</em> a stock is flagged as "Short Squeeze Dynamics" — not a black-box probability.</p>
+    </div>
+    <div class="card-green">
+      <h3 style="font-size:0.82rem">📡 Multi-Source Aggregation</h3>
+      <p style="font-size:0.7rem">Combines RSS news, GNews, Reddit social sentiment. Source concentration factor penalizes amplification — 2 outlets ≠ 20 independent voices.</p>
+    </div>
+    <div class="card-green">
+      <h3 style="font-size:0.82rem">🕐 Temporal Intelligence</h3>
+      <p style="font-size:0.7rem">91-day narrative drift chart + shift detection. The only tool that shows you <em>how</em> the story evolved — and exactly when it changed direction.</p>
+    </div>
+    <div class="card-green">
+      <h3 style="font-size:0.82rem">🎮 Gamified Exploration</h3>
+      <p style="font-size:0.7rem">XP, missions, badges, confetti — encourage deeper exploration. Optional and toggle-able. Designed for retail investors, not institutions.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ─────────────────────────────────────────────────────────────
+     SLIDE 17: ROADMAP
+───────────────────────────────────────────────────────────────── -->
+<section>
+  <p class="section-label">Roadmap</p>
+  <h2>What's next</h2>
+  <div class="cols-3" style="margin-top:1rem;gap:0.8rem">
+    <div>
+      <div class="card-green" style="margin-bottom:0.7rem">
+        <h3 style="font-size:0.8rem;color:#4ade80">Short-term (1–2 mo)</h3>
+      </div>
+      <div class="card" style="margin-bottom:0.5rem;padding:0.7rem">
+        <p style="font-size:0.7rem;margin:0">🔔 Pattern-change alerts — email when archetype shifts</p>
+      </div>
+      <div class="card" style="margin-bottom:0.5rem;padding:0.7rem">
+        <p style="font-size:0.7rem;margin:0">🏭 Sector view — aggregate narrative across S&amp;P sector</p>
+      </div>
+      <div class="card" style="padding:0.7rem">
+        <p style="font-size:0.7rem;margin:0">📜 Historical pattern replay — "NVDA's story 3 months ago"</p>
+      </div>
+    </div>
+    <div>
+      <div class="card" style="margin-bottom:0.7rem;border-color:rgba(234,179,8,0.2)">
+        <h3 style="font-size:0.8rem;color:#fbbf24">Medium-term (2–6 mo)</h3>
+      </div>
+      <div class="card" style="margin-bottom:0.5rem;padding:0.7rem">
+        <p style="font-size:0.7rem;margin:0">📊 Backtest validation — does hype &gt;70 actually predict reversals?</p>
+      </div>
+      <div class="card" style="margin-bottom:0.5rem;padding:0.7rem">
+        <p style="font-size:0.7rem;margin:0">⚡ WebSocket live updates — real-time narrative feed without polling</p>
+      </div>
+      <div class="card" style="padding:0.7rem">
+        <p style="font-size:0.7rem;margin:0">📱 React Native mobile app — same Django backend</p>
+      </div>
+    </div>
+    <div>
+      <div class="card" style="margin-bottom:0.7rem;border-color:rgba(168,85,247,0.2)">
+        <h3 style="font-size:0.8rem;color:#c084fc">Long-term (6+ mo)</h3>
+      </div>
+      <div class="card" style="margin-bottom:0.5rem;padding:0.7rem">
+        <p style="font-size:0.7rem;margin:0">💎 Premium tier — real-time scraping, custom watchlist alerts</p>
+      </div>
+      <div class="card" style="margin-bottom:0.5rem;padding:0.7rem">
+        <p style="font-size:0.7rem;margin:0">📋 Institutional signals — SEC filings, options flow as narrative signals</p>
+      </div>
+      <div class="card" style="padding:0.7rem">
+        <p style="font-size:0.7rem;margin:0">🌍 Public API + data export for developers building on narrative data</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─────────────────────────────────────────────────────────────
+     SLIDE 18: DEMO SCRIPT
+───────────────────────────────────────────────────────────────── -->
+<section>
+  <p class="section-label">Live Demo</p>
+  <h2>Demo walkthrough — follow this order</h2>
+  <div class="cols-2" style="gap:0.8rem;margin-top:0.7rem">
+    <div>
+      <div class="card" style="margin-bottom:0.6rem;border-left:3px solid #22c55e;padding:0.7rem 0.9rem">
+        <div style="display:flex;align-items:center;gap:0.6rem;margin-bottom:0.3rem">
+          <span class="pill" style="font-size:0.6rem;padding:2px 8px">Step 1</span>
+          <h3 style="font-size:0.78rem;margin:0;color:#fff">Homepage</h3>
+        </div>
+        <p style="font-size:0.68rem;margin:0;color:#888">Point out the search bar, the live narrative feed, and the daily challenge. Show the "Try:" popular tickers.</p>
+      </div>
+      <div class="card" style="margin-bottom:0.6rem;border-left:3px solid #22c55e;padding:0.7rem 0.9rem">
+        <div style="display:flex;align-items:center;gap:0.6rem;margin-bottom:0.3rem">
+          <span class="pill" style="font-size:0.6rem;padding:2px 8px">Step 2</span>
+          <h3 style="font-size:0.78rem;margin:0;color:#fff">Search "NVDA"</h3>
+        </div>
+        <p style="font-size:0.68rem;margin:0;color:#888">Type in search bar — show autocomplete dropdown (Twelve Data). Hit enter to navigate.</p>
+      </div>
+      <div class="card" style="margin-bottom:0.6rem;border-left:3px solid #22c55e;padding:0.7rem 0.9rem">
+        <div style="display:flex;align-items:center;gap:0.6rem;margin-bottom:0.3rem">
+          <span class="pill" style="font-size:0.6rem;padding:2px 8px">Step 3</span>
+          <h3 style="font-size:0.78rem;margin:0;color:#fff">Stock Header + Chart</h3>
+        </div>
+        <p style="font-size:0.68rem;margin:0;color:#888">Show live price. Click through chart ranges (1D → 7D → 1M). Point out the WatchButton.</p>
+      </div>
+      <div class="card" style="border-left:3px solid #22c55e;padding:0.7rem 0.9rem">
+        <div style="display:flex;align-items:center;gap:0.6rem;margin-bottom:0.3rem">
+          <span class="pill" style="font-size:0.6rem;padding:2px 8px">Step 4</span>
+          <h3 style="font-size:0.78rem;margin:0;color:#fff">Analysis Cards</h3>
+        </div>
+        <p style="font-size:0.68rem;margin:0;color:#888">Show the 4 cards: Sentiment, Velocity, Hype Score, Pattern. Hover tooltips. Read the AI Narrative Summary.</p>
+      </div>
+    </div>
+    <div>
+      <div class="card" style="margin-bottom:0.6rem;border-left:3px solid #a855f7;padding:0.7rem 0.9rem">
+        <div style="display:flex;align-items:center;gap:0.6rem;margin-bottom:0.3rem">
+          <span class="pill pill-purple" style="font-size:0.6rem;padding:2px 8px">Step 5</span>
+          <h3 style="font-size:0.78rem;margin:0;color:#fff">Narrative Timeline</h3>
+        </div>
+        <p style="font-size:0.68rem;margin:0;color:#888">Scroll to the 91-day chart. Show the window stats (7d/30d/90d). Point out any shift annotation.</p>
+      </div>
+      <div class="card" style="margin-bottom:0.6rem;border-left:3px solid #eab308;padding:0.7rem 0.9rem">
+        <div style="display:flex;align-items:center;gap:0.6rem;margin-bottom:0.3rem">
+          <span class="pill pill-yellow" style="font-size:0.6rem;padding:2px 8px">Step 6</span>
+          <h3 style="font-size:0.78rem;margin:0;color:#fff">AI Chat Panel</h3>
+        </div>
+        <p style="font-size:0.68rem;margin:0;color:#888">Log in. Type "What is driving the current sentiment for NVDA?" Show the context-aware response. +20 XP fires.</p>
+      </div>
+      <div class="card" style="margin-bottom:0.6rem;border-left:3px solid #3b82f6;padding:0.7rem 0.9rem">
+        <div style="display:flex;align-items:center;gap:0.6rem;margin-bottom:0.3rem">
+          <span class="pill pill-blue" style="font-size:0.6rem;padding:2px 8px">Step 7</span>
+          <h3 style="font-size:0.78rem;margin:0;color:#fff">Watchlist</h3>
+        </div>
+        <p style="font-size:0.68rem;margin:0;color:#888">Click the WatchButton — show green glow animation + toast. Navigate to /watchlist to show saved tickers.</p>
+      </div>
+      <div class="card" style="border-left:3px solid #22c55e;padding:0.7rem 0.9rem;background:rgba(34,197,94,0.04)">
+        <h3 style="font-size:0.75rem;color:#22c55e;margin:0 0 0.3rem">⚡ Before you demo — pre-warm these</h3>
+        <p style="font-size:0.65rem;margin:0;color:#666">Visit <code style="color:#4ade80;font-size:0.6rem">/stock/NVDA</code>, <code style="color:#4ade80;font-size:0.6rem">/stock/AAPL</code>, and <code style="color:#4ade80;font-size:0.6rem">/stock/TSLA</code> once before presenting. Redis will cache everything so there's zero lag during the demo.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─────────────────────────────────────────────────────────────
+     SLIDE 19: CLOSING
+───────────────────────────────────────────────────────────────── -->
+<section>
+  <div class="title-logo" style="margin-top:2rem">
+    <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/>
+      <line x1="6" y1="20" x2="6" y2="14"/>
+    </svg>
+  </div>
+
+  <h2 style="font-size:1.8rem;margin-bottom:0.4rem">
+    <span style="background:linear-gradient(135deg,#4ade80,#22c55e,#16a34a);-webkit-background-clip:text;-webkit-text-fill-color:transparent">
+      MarketNoise
+    </span>
+  </h2>
+  <p style="color:#888;font-size:0.85rem;margin-bottom:1.5rem">Narrative Intelligence for Retail Investors</p>
+
+  <div class="highlight-box" style="max-width:560px;margin:0 auto 1.5rem">
+    <p style="margin:0;font-size:0.85rem;color:#ccc;line-height:1.7">
+      A full-stack, production-ready platform built with <span class="green">React 19</span>,
+      <span class="green">Django 4.2</span>, <span class="green">FinBERT</span>, and
+      <span class="green">Celery</span> — helping retail investors cut through
+      market noise with transparent, explainable narrative intelligence.
+    </p>
+  </div>
+
+  <div style="display:flex;justify-content:center;gap:0.6rem;flex-wrap:wrap">
+    <span class="pill">FinBERT NLP</span>
+    <span class="pill pill-blue">React + TypeScript</span>
+    <span class="pill pill-purple">Django + DRF</span>
+    <span class="pill pill-yellow">Celery + Redis</span>
+    <span class="pill pill-red">Hype Detection</span>
+    <span class="pill">JWT Auth</span>
+    <span class="pill pill-blue">Recharts</span>
+    <span class="pill pill-purple">XGBoost</span>
+  </div>
+
+  <p style="margin-top:2rem;font-size:0.7rem;color:#333">github.com/agam04/Market-Noise</p>
+</section>
+
+</div><!-- /slides -->
+</div><!-- /reveal -->
+
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.js"></script>
+<script>
+  Reveal.initialize({
+    hash: true,
+    slideNumber: 'c/t',
+    transition: 'fade',
+    transitionSpeed: 'fast',
+    backgroundTransition: 'none',
+    controls: true,
+    progress: true,
+    center: true,
+    width: 1200,
+    height: 700,
+    margin: 0.04,
+    plugins: []
+  });
+</script>
+</body>
+</html>
